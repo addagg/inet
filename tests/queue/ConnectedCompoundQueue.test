@@ -1,0 +1,144 @@
+%description:
+
+yes
+
+%file: test.ned
+
+import inet.common.newqueue.IPacketQueue;
+import test.queue.TestProtocolUsingAccessor;
+import test.queue.TestSource;
+import test.queue.TestSink;
+
+network TestConnected
+{
+    submodules:
+        source: TestSource {
+            @display("p=100,100");
+        }
+        queue: <> like IPacketQueue {
+            @display("p=200,100");
+        }
+        protocol: TestProtocolUsingAccessor {
+            @display("p=300,100");
+        }
+        sink: TestSink {
+            @display("p=400,100");
+        }
+    connections:
+        source.out --> queue.in;
+        queue.out --> protocol.in;
+        protocol.out --> sink.in;
+}
+
+%inifile: omnetpp.ini
+
+[General]
+network = TestConnected
+sim-time-limit = 10s
+cmdenv-event-banners = false
+*.source.interval = uniform(0s, 0.5s)
+*.protocol.interval = uniform(0s, 1s)
+*.queue.typename = "TestCompoundQueue"
+
+%contains: stdout
+Packet sent: (inet::Packet)0 (1 bytes) [BitCountChunk, length = 1 b]
+Pushing packet 0 into the queue.
+Popping packet 0 from the queue.
+Packet sent: (inet::Packet)1 (1 bytes) [BitCountChunk, length = 1 b]
+Pushing packet 1 into the queue.
+Packet sent: (inet::Packet)2 (1 bytes) [BitCountChunk, length = 1 b]
+Pushing packet 2 into the queue.
+Popping packet 1 from the queue.
+Packet received: (inet::Packet)0 (1 bytes) [BitCountChunk, length = 1 b]
+Packet sent: (inet::Packet)3 (1 bytes) [BitCountChunk, length = 1 b]
+Pushing packet 3 into the queue.
+Popping packet 2 from the queue.
+Packet received: (inet::Packet)1 (1 bytes) [BitCountChunk, length = 1 b]
+Packet sent: (inet::Packet)4 (0 bytes) [BitCountChunk, length = 0 B]
+Pushing packet 4 into the queue.
+Popping packet 4 from the queue.
+Packet received: (inet::Packet)2 (1 bytes) [BitCountChunk, length = 1 b]
+Packet sent: (inet::Packet)5 (0 bytes) [BitCountChunk, length = 0 B]
+Pushing packet 5 into the queue.
+Packet sent: (inet::Packet)6 (0 bytes) [BitCountChunk, length = 0 B]
+Pushing packet 6 into the queue.
+Packet sent: (inet::Packet)7 (1 bytes) [BitCountChunk, length = 1 b]
+Pushing packet 7 into the queue.
+Popping packet 5 from the queue.
+Packet received: (inet::Packet)4 (0 bytes) [BitCountChunk, length = 0 B]
+Packet sent: (inet::Packet)8 (1 bytes) [BitCountChunk, length = 1 b]
+Pushing packet 8 into the queue.
+Packet sent: (inet::Packet)9 (0 bytes) [BitCountChunk, length = 0 B]
+Pushing packet 9 into the queue.
+Packet sent: (inet::Packet)10 (1 bytes) [BitCountChunk, length = 1 b]
+Pushing packet 10 into the queue.
+Popping packet 6 from the queue.
+Packet received: (inet::Packet)5 (0 bytes) [BitCountChunk, length = 0 B]
+Popping packet 9 from the queue.
+Packet received: (inet::Packet)6 (0 bytes) [BitCountChunk, length = 0 B]
+Packet sent: (inet::Packet)11 (1 bytes) [BitCountChunk, length = 1 b]
+Pushing packet 11 into the queue.
+Popping packet 3 from the queue.
+Packet received: (inet::Packet)9 (0 bytes) [BitCountChunk, length = 0 B]
+Popping packet 7 from the queue.
+Packet received: (inet::Packet)3 (1 bytes) [BitCountChunk, length = 1 b]
+Packet sent: (inet::Packet)12 (1 bytes) [BitCountChunk, length = 1 b]
+Pushing packet 12 into the queue.
+Popping packet 8 from the queue.
+Packet received: (inet::Packet)7 (1 bytes) [BitCountChunk, length = 1 b]
+Packet sent: (inet::Packet)13 (1 bytes) [BitCountChunk, length = 1 b]
+Pushing packet 13 into the queue.
+Packet sent: (inet::Packet)14 (0 bytes) [BitCountChunk, length = 0 B]
+Pushing packet 14 into the queue.
+Popping packet 14 from the queue.
+Packet received: (inet::Packet)8 (1 bytes) [BitCountChunk, length = 1 b]
+Packet sent: (inet::Packet)15 (0 bytes) [BitCountChunk, length = 0 B]
+Pushing packet 15 into the queue.
+Popping packet 15 from the queue.
+Packet received: (inet::Packet)14 (0 bytes) [BitCountChunk, length = 0 B]
+Packet sent: (inet::Packet)16 (1 bytes) [BitCountChunk, length = 1 b]
+Pushing packet 16 into the queue.
+Popping packet 10 from the queue.
+Packet received: (inet::Packet)15 (0 bytes) [BitCountChunk, length = 0 B]
+Packet sent: (inet::Packet)17 (0 bytes) [BitCountChunk, length = 0 B]
+Pushing packet 17 into the queue.
+Packet sent: (inet::Packet)18 (0 bytes) [BitCountChunk, length = 0 B]
+Pushing packet 18 into the queue.
+Popping packet 17 from the queue.
+Packet received: (inet::Packet)10 (1 bytes) [BitCountChunk, length = 1 b]
+Popping packet 18 from the queue.
+Packet received: (inet::Packet)17 (0 bytes) [BitCountChunk, length = 0 B]
+Packet sent: (inet::Packet)19 (1 bytes) [BitCountChunk, length = 1 b]
+Pushing packet 19 into the queue.
+Packet sent: (inet::Packet)20 (1 bytes) [BitCountChunk, length = 1 b]
+Pushing packet 20 into the queue.
+Packet sent: (inet::Packet)21 (0 bytes) [BitCountChunk, length = 0 B]
+Pushing packet 21 into the queue.
+Popping packet 21 from the queue.
+Packet received: (inet::Packet)18 (0 bytes) [BitCountChunk, length = 0 B]
+Packet sent: (inet::Packet)22 (0 bytes) [BitCountChunk, length = 0 B]
+Pushing packet 22 into the queue.
+Popping packet 22 from the queue.
+Packet received: (inet::Packet)21 (0 bytes) [BitCountChunk, length = 0 B]
+Packet sent: (inet::Packet)23 (1 bytes) [BitCountChunk, length = 1 b]
+Pushing packet 23 into the queue.
+Packet sent: (inet::Packet)24 (0 bytes) [BitCountChunk, length = 0 B]
+Pushing packet 24 into the queue.
+Packet sent: (inet::Packet)25 (0 bytes) [BitCountChunk, length = 0 B]
+Pushing packet 25 into the queue.
+Packet sent: (inet::Packet)26 (1 bytes) [BitCountChunk, length = 1 b]
+Pushing packet 26 into the queue.
+Popping packet 24 from the queue.
+Packet received: (inet::Packet)22 (0 bytes) [BitCountChunk, length = 0 B]
+Packet sent: (inet::Packet)27 (0 bytes) [BitCountChunk, length = 0 B]
+Pushing packet 27 into the queue.
+Packet sent: (inet::Packet)28 (1 bytes) [BitCountChunk, length = 1 b]
+Pushing packet 28 into the queue.
+Popping packet 25 from the queue.
+Packet received: (inet::Packet)24 (0 bytes) [BitCountChunk, length = 0 B]
+Packet sent: (inet::Packet)29 (1 bytes) [BitCountChunk, length = 1 b]
+Pushing packet 29 into the queue.
+Packet sent: (inet::Packet)30 (0 bytes) [BitCountChunk, length = 0 B]
+Pushing packet 30 into the queue.
+Packet sent: (inet::Packet)31 (0 bytes) [BitCountChunk, length = 0 B]
+Pushing packet 31 into the queue.
