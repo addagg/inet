@@ -25,7 +25,6 @@
 #include "inet/common/ProtocolGroup.h"
 #include "inet/common/ProtocolTag_m.h"
 #include "inet/common/packet/Packet.h"
-#include "inet/common/queue/IPassiveQueue.h"
 #include "inet/linklayer/acking/AckingMac.h"
 #include "inet/linklayer/acking/AckingMacHeader_m.h"
 #include "inet/linklayer/common/InterfaceTag_m.h"
@@ -52,19 +51,19 @@ void AckingMac::flushQueue()
 {
     ASSERT(queueModule);
     while (!queueModule->isEmpty()) {
-        cMessage *msg = queueModule->pop();
+        cMessage *msg = queueModule->popPacket();
         PacketDropDetails details;
         details.setReason(INTERFACE_DOWN);
         emit(packetDroppedSignal, msg, &details);
         delete msg;
     }
-    queueModule->clear();    // clear request count
 }
 
 void AckingMac::clearQueue()
 {
     ASSERT(queueModule);
-    queueModule->clear();
+    while (!queueModule->isEmpty())
+        delete queueModule->popPacket();
 }
 
 void AckingMac::initialize(int stage)
@@ -85,12 +84,7 @@ void AckingMac::initialize(int stage)
         radio = check_and_cast<IRadio *>(radioModule);
         transmissionState = IRadio::TRANSMISSION_STATE_UNDEFINED;
 
-        // find queueModule
-        cGate *queueOut = gate("upperLayerIn")->getPathStartGate();
-        queueModule = dynamic_cast<IPassiveQueue *>(queueOut->getOwnerModule());
-        if (queueModule == nullptr)
-            throw cRuntimeError("External queue required for AckingMac module");
-
+        queueModule = check_and_cast<inet::queue::IPacketQueue *>(getSubmodule("queue"));
     }
     else if (stage == INITSTAGE_LINK_LAYER) {
         radio->setRadioMode(fullDuplex ? IRadio::RADIO_MODE_TRANSCEIVER : IRadio::RADIO_MODE_RECEIVER);
@@ -157,7 +151,6 @@ void AckingMac::startTransmitting(Packet *msg)
 
 void AckingMac::getNextMsgFromHL()
 {
-    ASSERT(outStandingRequests >= queueModule->getNumPendingRequests());
     if (outStandingRequests == 0) {
         queueModule->requestPacket();
         outStandingRequests++;
