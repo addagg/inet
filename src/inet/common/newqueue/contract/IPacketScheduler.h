@@ -15,27 +15,37 @@
 // along with this program; if not, see http://www.gnu.org/licenses/.
 //
 
-#ifndef __INET_DELAYER_H
-#define __INET_DELAYER_H
+#ifndef __INET_IPACKETSCHEDULER_H
+#define __INET_IPACKETSCHEDULER_H
 
-#include "inet/common/newqueue/base/PacketQueueBase.h"
+#include "inet/common/newqueue/contract/IPacketSource.h"
 
 namespace inet {
 namespace queue {
 
-class INET_API Delayer : public cSimpleModule, public IPacketSink
-{
-  protected:
-    IPacketSink *sink = nullptr;
+typedef int (*PacketSchedulerFunction)(const std::vector<IPacketSource *>& queues);
 
-  protected:
-    virtual void initialize() override;
-    virtual void handleMessage(cMessage *message) override;
-    virtual void pushPacket(Packet *packet) override;
+/**
+ * This class defines the interface for packet schedulers.
+ */
+class INET_API IPacketScheduler
+{
+  public:
+    virtual ~IPacketScheduler() {}
+
+    /**
+     * Returns the index of the scheduled queue.
+     */
+    virtual int schedulePacket(const std::vector<IPacketSource *>& queues) const = 0;
+
+    /**
+     * Returns a pointer to the scheduler function.
+     */
+    virtual PacketSchedulerFunction getSchedulerFunction() const = 0;
 };
 
 } // namespace queue
 } // namespace inet
 
-#endif // ifndef __INET_DELAYER_H
+#endif // ifndef __INET_IPACKETSCHEDULER_H
 

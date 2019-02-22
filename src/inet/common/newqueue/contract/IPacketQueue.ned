@@ -15,34 +15,13 @@
 // along with this program; if not, see http://www.gnu.org/licenses/.
 //
 
-#ifndef __INET_QUEUEINGPROTOCOLBASE_H
-#define __INET_QUEUEINGPROTOCOLBASE_H
+package inet.common.newqueue.contract;
 
-#include "inet/common/newqueue/IPacketQueue.h"
-#include "inet/common/newqueue/QueueAccessor.h"
-
-namespace inet {
-namespace queue {
-
-class INET_API QueueingProtocolBase
+moduleinterface IPacketQueue
 {
-  protected:
-    bool internalQueue = false;
-    IPacketQueue *queue = nullptr;
-
-  protected:
-    virtual void initializeQueue(cModule *submodule, cGate *gate);
-
-    virtual bool isDequeingPacketEnabled() = 0;
-    virtual void processDequedPacket(Packet *packet) = 0;
-
-    virtual void startDequeingPacket();
-    virtual void handlePacket(Packet *packet);
-
-};
-
-} // namespace queue
-} // namespace inet
-
-#endif // ifndef __INET_QUEUEINGPROTOCOLBASE_H
-
+    parameters:
+        @display("i=block/queue");
+    gates:
+        input in;
+        output out;
+}

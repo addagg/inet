@@ -15,27 +15,34 @@
 // along with this program; if not, see http://www.gnu.org/licenses/.
 //
 
-#ifndef __INET_DELAYER_H
-#define __INET_DELAYER_H
+#ifndef __INET_QUEUEINGPROTOCOLBASE_H
+#define __INET_QUEUEINGPROTOCOLBASE_H
 
-#include "inet/common/newqueue/base/PacketQueueBase.h"
+#include "inet/common/newqueue/contract/IPacketQueue.h"
+#include "inet/common/newqueue/QueueAccessor.h"
 
 namespace inet {
 namespace queue {
 
-class INET_API Delayer : public cSimpleModule, public IPacketSink
+class INET_API QueueingProtocolBase
 {
   protected:
-    IPacketSink *sink = nullptr;
+    bool internalQueue = false;
+    IPacketQueue *queue = nullptr;
 
   protected:
-    virtual void initialize() override;
-    virtual void handleMessage(cMessage *message) override;
-    virtual void pushPacket(Packet *packet) override;
+    virtual void initializeQueue(cModule *submodule, cGate *gate);
+
+    virtual bool isDequeingPacketEnabled() = 0;
+    virtual void processDequedPacket(Packet *packet) = 0;
+
+    virtual void startDequeingPacket();
+    virtual void handlePacket(Packet *packet);
+
 };
 
 } // namespace queue
 } // namespace inet
 
-#endif // ifndef __INET_DELAYER_H
+#endif // ifndef __INET_QUEUEINGPROTOCOLBASE_H
 

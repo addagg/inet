@@ -18,7 +18,7 @@
 #ifndef __INET_COMPOUNDQUEUE_H
 #define __INET_COMPOUNDQUEUE_H
 
-#include "inet/common/newqueue/PacketQueueBase.h"
+#include "inet/common/newqueue/base/PacketQueueBase.h"
 
 namespace inet {
 namespace queue {
@@ -39,7 +39,7 @@ class INET_API CompoundQueue : public PacketQueueBase
     const char *displayStringTextFormat = nullptr;
     cGate *inputGate = nullptr;
     cGate *outputGate = nullptr;
-    IPacketQueue *inputQueue = nullptr;
+    IPacketSink *inputQueue = nullptr;
     IPacketQueue *outputQueue = nullptr;
     cMessage pendingRequestPacket;
 

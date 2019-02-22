@@ -17,6 +17,7 @@
 
 #include "inet/common/FunctionRegistry.h"
 #include "inet/common/newqueue/InfiniteQueue.h"
+#include "inet/common/Simsignals.h"
 #include "inet/common/StringFormat.h"
 
 namespace inet {

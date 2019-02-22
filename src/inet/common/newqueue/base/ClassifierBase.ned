@@ -15,13 +15,14 @@
 // along with this program; if not, see http://www.gnu.org/licenses/.
 //
 
-package inet.common.newqueue;
+package inet.common.newqueue.base;
 
-moduleinterface IPacketQueue
+simple ClassifierBase extends PacketSinkBase
 {
     parameters:
-        @display("i=block/queue");
+        @class(queue::ClassifierBase);
+        @display("i=block/classifier");
     gates:
         input in;
-        output out;
+        output out[];
 }

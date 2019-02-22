@@ -18,8 +18,8 @@
 #ifndef __INET_CLASSIFIER_H
 #define __INET_CLASSIFIER_H
 
-#include "inet/common/newqueue/ClassifierBase.h"
-#include "inet/common/newqueue/IPacketClassifier.h"
+#include "inet/common/newqueue/base/ClassifierBase.h"
+#include "inet/common/newqueue/contract/IPacketClassifier.h"
 
 namespace inet {
 namespace queue {
@@ -53,5 +53,5 @@ class INET_API Classifier : public ClassifierBase
 } // namespace queue
 } // namespace inet
 
-#endif // ifndef __INET_CLASSIFIERBASE_H
+#endif // ifndef __INET_CLASSIFIER_H
 

@@ -16,6 +16,7 @@
 //
 
 #include "inet/common/newqueue/CompoundQueue.h"
+#include "inet/common/newqueue/QueueUtils.h"
 #include "inet/common/Simsignals.h"
 #include "inet/common/StringFormat.h"
 
@@ -47,7 +48,7 @@ void CompoundQueue::initialize()
     byteCapacity = par("byteCapacity");
     inputGate = gate("in");
     outputGate = gate("out");
-    inputQueue = check_and_cast<IPacketQueue *>(gate("in")->getPathEndGate()->getOwnerModule());
+    inputQueue = check_and_cast<IPacketSink *>(gate("in")->getPathEndGate()->getOwnerModule());
     outputQueue = check_and_cast<IPacketQueue *>(gate("out")->getPathStartGate()->getOwnerModule());
 }
 

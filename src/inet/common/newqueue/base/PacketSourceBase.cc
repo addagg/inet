@@ -15,27 +15,37 @@
 // along with this program; if not, see http://www.gnu.org/licenses/.
 //
 
-#ifndef __INET_DELAYER_H
-#define __INET_DELAYER_H
-
-#include "inet/common/newqueue/base/PacketQueueBase.h"
+#include "inet/common/newqueue/base/PacketSourceBase.h"
 
 namespace inet {
 namespace queue {
 
-class INET_API Delayer : public cSimpleModule, public IPacketSink
+void PacketSourceBase::initialize()
 {
-  protected:
-    IPacketSink *sink = nullptr;
+    cSimpleModule::initialize();
+    asynchronous = par("asynchronous");
+}
 
-  protected:
-    virtual void initialize() override;
-    virtual void handleMessage(cMessage *message) override;
-    virtual void pushPacket(Packet *packet) override;
-};
+void PacketSourceBase::handleMessage(cMessage *msg)
+{
+    throw cRuntimeError("Invalid operation");
+}
+
+void PacketSourceBase::requestPacket()
+{
+    ASSERT(!hasPendingRequestPacket);
+    hasPendingRequestPacket = true;
+    handlePendingRequestPacket();
+}
+
+void PacketSourceBase::handlePendingRequestPacket()
+{
+    Enter_Method_Silent();
+    if (!isEmpty()) {
+        send(popPacket(), "out");
+        hasPendingRequestPacket = false;
+    }
+}
 
 } // namespace queue
 } // namespace inet
-
-#endif // ifndef __INET_DELAYER_H
-

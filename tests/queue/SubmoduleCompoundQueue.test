@@ -4,7 +4,7 @@ yes
 
 %file: test.ned
 
-import inet.common.newqueue.IPacketQueue;
+import inet.common.newqueue.contract.IPacketQueue;
 import test.queue.TestProtocolUsingAccessor;
 import test.queue.TestSource;
 import test.queue.TestSink;

@@ -18,7 +18,8 @@
 
 package inet.linklayer.ethernet;
 
-import inet.common.newqueue.ClassifierBase;
+import inet.common.newqueue.base.ClassifierBase;
+import inet.common.newqueue.contract.IPacketClassifier;
 
 //
 // Simple classifier, that forwards EtherPauseFrames
@@ -28,7 +29,7 @@ import inet.common.newqueue.ClassifierBase;
 // This component can be used to build a QoS queue that gives
 // the pause frames the highest priority.
 //
-simple EtherFrameClassifier extends ClassifierBase
+simple EtherFrameClassifier extends ClassifierBase like IPacketClassifier
 {
     parameters:
         @class(EtherFrameClassifier);

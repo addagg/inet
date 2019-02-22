@@ -15,27 +15,22 @@
 // along with this program; if not, see http://www.gnu.org/licenses/.
 //
 
-#ifndef __INET_DELAYER_H
-#define __INET_DELAYER_H
+#ifndef __INET_PACKETSINKBASE_H
+#define __INET_PACKETSINKBASE_H
 
-#include "inet/common/newqueue/base/PacketQueueBase.h"
+#include "inet/common/newqueue/contract/IPacketSink.h"
 
 namespace inet {
 namespace queue {
 
-class INET_API Delayer : public cSimpleModule, public IPacketSink
+class INET_API PacketSinkBase : public cSimpleModule, public IPacketSink
 {
   protected:
-    IPacketSink *sink = nullptr;
-
-  protected:
-    virtual void initialize() override;
-    virtual void handleMessage(cMessage *message) override;
-    virtual void pushPacket(Packet *packet) override;
+    virtual void handleMessage(cMessage *msg) override;
 };
 
 } // namespace queue
 } // namespace inet
 
-#endif // ifndef __INET_DELAYER_H
+#endif // ifndef __INET_PACKETSINKBASE_H
 

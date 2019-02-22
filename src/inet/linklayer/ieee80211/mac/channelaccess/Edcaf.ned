@@ -18,7 +18,7 @@
 
 package inet.linklayer.ieee80211.mac.channelaccess;
 
-import inet.common.newqueue.IPacketQueue;
+import inet.common.newqueue.contract.IPacketQueue;
 import inet.linklayer.ieee80211.mac.contract.IContention;
 import inet.linklayer.ieee80211.mac.originator.QosAckHandler;
 import inet.linklayer.ieee80211.mac.originator.QosRecoveryProcedure;

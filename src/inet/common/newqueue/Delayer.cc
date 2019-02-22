@@ -39,13 +39,13 @@ void Delayer::handleMessage(cMessage *message)
         if (sink == nullptr)
             send(packet, "out");
         else
-            sink->processPacket(packet);
+            sink->pushPacket(packet);
     }
     else
-        processPacket(packet);
+        pushPacket(packet);
 }
 
-void Delayer::processPacket(Packet *packet)
+void Delayer::pushPacket(Packet *packet)
 {
     scheduleAt(simTime() + par("delay"), packet);
 }

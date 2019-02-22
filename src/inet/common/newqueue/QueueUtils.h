@@ -15,11 +15,18 @@
 // along with this program; if not, see http://www.gnu.org/licenses/.
 //
 
-package inet.common.newqueue;
+#ifndef __INET_QUEUEUTILS_H
+#define __INET_QUEUEUTILS_H
 
-simple PacketQueueBase
-{
-    parameters:
-        bool asynchronous = default(false);
-        @display("i=block/queue");
-}
+#include "inet/common/packet/Packet.h"
+
+namespace inet {
+namespace queue {
+
+void animateSend(Packet *packet, cGate *gate);
+
+} // namespace queue
+} // namespace inet
+
+#endif // ifndef __INET_QUEUEUTILS_H
+

@@ -20,7 +20,7 @@ package inet.linklayer.ethernet;
 
 import inet.common.newqueue.CompoundQueue;
 import inet.common.newqueue.DropTailQueue;
-import inet.common.newqueue.IPacketQueue;
+import inet.common.newqueue.contract.IPacketQueue;
 import inet.common.newqueue.PriorityScheduler;
 
 //

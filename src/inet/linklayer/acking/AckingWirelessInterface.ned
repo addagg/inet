@@ -19,7 +19,7 @@
 
 package inet.linklayer.acking;
 
-import inet.common.newqueue.IPacketQueue;
+import inet.common.newqueue.contract.IPacketQueue;
 import inet.linklayer.contract.IWirelessInterface;
 import inet.networklayer.common.InterfaceEntry;
 import inet.physicallayer.contract.packetlevel.IRadio;

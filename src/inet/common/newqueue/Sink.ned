@@ -17,16 +17,19 @@
 
 package inet.common.newqueue;
 
+import inet.common.newqueue.contract.IPacketSink;
+
 //
 // Silently discards all received packets.
 //
-simple Sink
+simple Sink like IPacketSink
 {
     parameters:
+        @class(queue::Sink);
         @display("i=block/sink");
         @signal[packetReceived](type=cPacket);
         @statistic[packetReceived](title="packets received"; source=packetReceived; record=count,"sum(packetBytes)","vector(packetBytes)"; interpolationmode=none);
     gates:
-        input in[];
+        input in;
 }
 

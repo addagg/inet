@@ -18,7 +18,7 @@
 #ifndef __INET_TESTPROTOCOLUSINGBASE_H
 #define __INET_TESTPROTOCOLUSINGBASE_H
 
-#include "inet/common/newqueue/IPacketQueue.h"
+#include "inet/common/newqueue/contract/IPacketQueue.h"
 #include "inet/common/newqueue/QueueingProtocolBase.h"
 
 namespace inet {

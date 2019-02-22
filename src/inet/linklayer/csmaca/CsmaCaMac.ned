@@ -17,7 +17,7 @@
 
 package inet.linklayer.csmaca;
 
-import inet.common.newqueue.IPacketQueue;
+import inet.common.newqueue.contract.IPacketQueue;
 import inet.linklayer.base.MacProtocolBase;
 import inet.linklayer.contract.IMacProtocol;
 

@@ -15,27 +15,30 @@
 // along with this program; if not, see http://www.gnu.org/licenses/.
 //
 
-#ifndef __INET_DELAYER_H
-#define __INET_DELAYER_H
+#ifndef __INET_IPACKETSINK_H
+#define __INET_IPACKETSINK_H
 
-#include "inet/common/newqueue/base/PacketQueueBase.h"
+#include "inet/common/packet/Packet.h"
 
 namespace inet {
 namespace queue {
 
-class INET_API Delayer : public cSimpleModule, public IPacketSink
+/**
+ * This class defines the interface for packet sinks.
+ */
+class INET_API IPacketSink
 {
-  protected:
-    IPacketSink *sink = nullptr;
+  public:
+    virtual ~IPacketSink() {}
 
-  protected:
-    virtual void initialize() override;
-    virtual void handleMessage(cMessage *message) override;
-    virtual void pushPacket(Packet *packet) override;
+    /**
+     * Pushes a packet into the sink. The packet must not be nullptr.
+     */
+    virtual void pushPacket(Packet *packet) = 0;
 };
 
 } // namespace queue
 } // namespace inet
 
-#endif // ifndef __INET_DELAYER_H
+#endif // ifndef __INET_IPACKETSINK_H
 

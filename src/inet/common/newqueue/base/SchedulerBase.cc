@@ -15,17 +15,19 @@
 // along with this program; if not, see http://www.gnu.org/licenses/.
 //
 
-#include "inet/common/newqueue/SchedulerBase.h"
+#include "inet/common/newqueue/base/SchedulerBase.h"
+#include "inet/common/newqueue/QueueUtils.h"
+#include "inet/common/Simsignals.h"
 
 namespace inet {
 namespace queue {
 
 void SchedulerBase::initialize()
 {
-    PacketQueueBase::initialize();
+    cSimpleModule::initialize();
     for (int i = 0; i < gateSize("in"); i++) {
         auto inputGate = gate("in", i);
-        auto inputQueue = check_and_cast<IPacketQueue *>(inputGate->getPathStartGate()->getOwnerModule());
+        auto inputQueue = check_and_cast<IPacketSource *>(inputGate->getPathStartGate()->getOwnerModule());
         inputGates.push_back(inputGate);
         inputQueues.push_back(inputQueue);
     }
@@ -41,7 +43,7 @@ void SchedulerBase::subscribe()
 {
     for (auto inputQueue : inputQueues) {
         auto inputQueueModule = check_and_cast<cModule *>(inputQueue);
-        inputQueueModule->subscribe(IPacketQueue::packetEnqueuedSignal, this);
+        inputQueueModule->subscribe(packetEnqueuedSignal, this);
     }
 }
 
@@ -49,7 +51,7 @@ void SchedulerBase::unsubscribe()
 {
     for (auto inputQueue : inputQueues) {
         auto inputQueueModule = check_and_cast<cModule *>(inputQueue);
-        inputQueueModule->unsubscribe(IPacketQueue::packetEnqueuedSignal, this);
+        inputQueueModule->unsubscribe(packetEnqueuedSignal, this);
     }
 }
 
@@ -88,7 +90,7 @@ void SchedulerBase::removePacket(Packet *packet)
 
 void SchedulerBase::receiveSignal(cComponent *source, simsignal_t signalID, cObject *obj, cObject *details)
 {
-    if (signalID == IPacketQueue::packetEnqueuedSignal) {
+    if (signalID == packetEnqueuedSignal) {
         if (hasPendingRequestPacket)
             handlePendingRequestPacket();
     }

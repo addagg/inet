@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2016 OpenSim Ltd.
+// Copyright (C) OpenSim Ltd.
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public License
@@ -15,13 +15,13 @@
 // along with this program; if not, see http://www.gnu.org/licenses/.
 //
 
-#include "inet/common/newqueue/IPacketQueue.h"
+package inet.common.newqueue.contract;
 
-namespace inet {
-namespace queue {
-
-simsignal_t IPacketQueue::packetEnqueuedSignal = cComponent::registerSignal("packetEnqueued");
-simsignal_t IPacketQueue::packetDequeuedSignal = cComponent::registerSignal("packetDequeued");
-
-} // namespace queue
-} // namespace inet
+moduleinterface IPacketClassifier
+{
+    parameters:
+        @display("i=block/classifier");
+    gates:
+        input in;
+        output out[];
+}

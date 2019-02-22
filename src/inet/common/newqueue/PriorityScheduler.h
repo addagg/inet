@@ -18,7 +18,7 @@
 #ifndef __INET_PRIORITYSCHEDULER_H
 #define __INET_PRIORITYSCHEDULER_H
 
-#include "inet/common/newqueue/SchedulerBase.h"
+#include "inet/common/newqueue/base/SchedulerBase.h"
 
 namespace inet {
 namespace queue {
@@ -31,7 +31,6 @@ class INET_API PriorityScheduler : public SchedulerBase
 
   public:
     virtual Packet *getPacket(int index) override;
-    virtual void pushPacket(Packet *packet) override;
 };
 
 } // namespace queue

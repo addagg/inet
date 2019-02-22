@@ -18,8 +18,8 @@
 #ifndef __INET_INFINITEQUEUE_H
 #define __INET_INFINITEQUEUE_H
 
-#include "inet/common/newqueue/IPacketComparator.h"
-#include "inet/common/newqueue/PacketQueueBase.h"
+#include "inet/common/newqueue/base/PacketQueueBase.h"
+#include "inet/common/newqueue/contract/IPacketComparator.h"
 
 namespace inet {
 namespace queue {

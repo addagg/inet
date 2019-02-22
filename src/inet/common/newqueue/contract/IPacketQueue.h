@@ -15,37 +15,26 @@
 // along with this program; if not, see http://www.gnu.org/licenses/.
 //
 
-#include "inet/common/newqueue/ClassifierBase.h"
+#ifndef __INET_IPACKETQUEUE_H
+#define __INET_IPACKETQUEUE_H
+
+#include "inet/common/newqueue/contract/IPacketSink.h"
+#include "inet/common/newqueue/contract/IPacketSource.h"
 
 namespace inet {
 namespace queue {
 
-void ClassifierBase::initialize()
+/**
+ * This class defines the interface for packet queues.
+ */
+class INET_API IPacketQueue : public IPacketSource, public IPacketSink
 {
-    for (int i = 0; i < gateSize("out"); i++) {
-        auto outputGate = gate("out", i);
-        auto outputQueue = check_and_cast<IPacketQueue *>(outputGate->getPathEndGate()->getOwnerModule());
-        outputGates.push_back(outputGate);
-        outputQueues.push_back(outputQueue);
-    }
-}
-
-int ClassifierBase::getNumPackets()
-{
-    return 0;
-}
-
-void ClassifierBase::pushPacket(Packet *packet)
-{
-    int index = classifyPacket(packet);
-    animateSend(packet, outputGates[index]);
-    outputQueues[index]->pushPacket(packet);
-}
-
-Packet *ClassifierBase::popPacket()
-{
-    throw cRuntimeError("Invalid operation");
-}
+  public:
+    virtual ~IPacketQueue() {}
+};
 
 } // namespace queue
 } // namespace inet
+
+#endif // ifndef __INET_IPACKETQUEUE_H
+

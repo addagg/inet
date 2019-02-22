@@ -20,7 +20,7 @@
 
 #include "inet/common/FSMA.h"
 #include "inet/common/packet/Packet.h"
-#include "inet/common/newqueue/IPacketQueue.h"
+#include "inet/common/newqueue/contract/IPacketQueue.h"
 #include "inet/common/queue/PacketQueue.h"
 #include "inet/linklayer/base/MacProtocolBase.h"
 #include "inet/linklayer/csmaca/CsmaCaMacHeader_m.h"

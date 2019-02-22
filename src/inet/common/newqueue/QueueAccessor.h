@@ -18,7 +18,7 @@
 #ifndef __INET_QUEUEACCESSOR_H
 #define __INET_QUEUEACCESSOR_H
 
-#include "inet/common/newqueue/IPacketQueue.h"
+#include "inet/common/newqueue/contract/IPacketQueue.h"
 
 namespace inet {
 namespace queue {

@@ -19,8 +19,7 @@
 #ifndef __INET_WRRSCHEDULER_H
 #define __INET_WRRSCHEDULER_H
 
-#include "inet/common/INETDefs.h"
-#include "inet/common/newqueue/SchedulerBase.h"
+#include "inet/common/newqueue/base/SchedulerBase.h"
 
 namespace inet {
 namespace queue {
@@ -42,7 +41,6 @@ class INET_API WrrScheduler : public SchedulerBase
     virtual ~WrrScheduler();
 
     virtual Packet *getPacket(int index) override;
-    virtual void pushPacket(Packet *packet) override;
 };
 
 } // namespace queue

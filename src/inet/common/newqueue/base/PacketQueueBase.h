@@ -15,38 +15,33 @@
 // along with this program; if not, see http://www.gnu.org/licenses/.
 //
 
-#ifndef __INET_SCHEDULERBASE_H
-#define __INET_SCHEDULERBASE_H
+#ifndef __INET_PACKETQUEUEBASE_H
+#define __INET_PACKETQUEUEBASE_H
 
-#include "inet/common/newqueue/PacketQueueBase.h"
+#include "inet/common/newqueue/contract/IPacketQueue.h"
+#include "inet/common/packet/Packet.h"
 
 namespace inet {
 namespace queue {
 
-class INET_API SchedulerBase : public PacketQueueBase, public cListener
+class INET_API PacketQueueBase : public cSimpleModule, public IPacketQueue
 {
   protected:
-    std::vector<cGate *> inputGates;
-    std::vector<IPacketQueue *> inputQueues;
+    bool asynchronous = false;
+    bool hasPendingRequestPacket = false;
 
   protected:
     virtual void initialize() override;
-    virtual void finish() override;
-
-    virtual void subscribe();
-    virtual void unsubscribe();
-
-    virtual int schedulePacket() const = 0;
+    virtual void handleMessage(cMessage *msg) override;
+    virtual void handlePendingRequestPacket();
 
   public:
-    virtual int getNumPackets() override;
-    virtual Packet *popPacket() override;
-    virtual void removePacket(Packet *packet) override;
-    virtual void receiveSignal(cComponent *source, simsignal_t signalID, cObject *obj, cObject *details) override;
+    virtual bool isEmpty() override { return getNumPackets() == 0; }
+    virtual void requestPacket() override;
 };
 
 } // namespace queue
 } // namespace inet
 
-#endif // ifndef __INET_SCHEDULERBASE_H
+#endif // ifndef __INET_PACKETQUEUEBASE_H
 

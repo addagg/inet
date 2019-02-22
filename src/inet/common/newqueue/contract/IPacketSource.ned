@@ -15,15 +15,12 @@
 // along with this program; if not, see http://www.gnu.org/licenses/.
 //
 
-package inet.common.newqueue;
+package inet.common.newqueue.contract;
 
-simple Bypass
+moduleinterface IPacketSource
 {
     parameters:
-        string outModule;
-        @class(queue::Bypass);
-        @display("i=block/rightarrow");
+        @display("i=block/source");
     gates:
-        input in;
         output out;
 }

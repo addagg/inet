@@ -18,7 +18,7 @@
 #ifndef __INET_IORIGINATORMACDATASERVICE_H
 #define __INET_IORIGINATORMACDATASERVICE_H
 
-#include "inet/common/newqueue/IPacketQueue.h"
+#include "inet/common/newqueue/contract/IPacketQueue.h"
 
 namespace inet {
 namespace ieee80211 {

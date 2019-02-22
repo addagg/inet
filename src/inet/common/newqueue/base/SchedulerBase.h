@@ -15,27 +15,38 @@
 // along with this program; if not, see http://www.gnu.org/licenses/.
 //
 
-#ifndef __INET_DELAYER_H
-#define __INET_DELAYER_H
+#ifndef __INET_SCHEDULERBASE_H
+#define __INET_SCHEDULERBASE_H
 
-#include "inet/common/newqueue/base/PacketQueueBase.h"
+#include "inet/common/newqueue/base/PacketSourceBase.h"
 
 namespace inet {
 namespace queue {
 
-class INET_API Delayer : public cSimpleModule, public IPacketSink
+class INET_API SchedulerBase : public PacketSourceBase, public cListener
 {
   protected:
-    IPacketSink *sink = nullptr;
+    std::vector<cGate *> inputGates;
+    std::vector<IPacketSource *> inputQueues;
 
   protected:
     virtual void initialize() override;
-    virtual void handleMessage(cMessage *message) override;
-    virtual void pushPacket(Packet *packet) override;
+    virtual void finish() override;
+
+    virtual void subscribe();
+    virtual void unsubscribe();
+
+    virtual int schedulePacket() const = 0;
+
+  public:
+    virtual int getNumPackets() override;
+    virtual Packet *popPacket() override;
+    virtual void removePacket(Packet *packet) override;
+    virtual void receiveSignal(cComponent *source, simsignal_t signalID, cObject *obj, cObject *details) override;
 };
 
 } // namespace queue
 } // namespace inet
 
-#endif // ifndef __INET_DELAYER_H
+#endif // ifndef __INET_SCHEDULERBASE_H
 

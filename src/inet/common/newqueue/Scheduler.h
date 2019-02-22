@@ -18,8 +18,8 @@
 #ifndef __INET_SCHEDULER_H
 #define __INET_SCHEDULER_H
 
-#include "inet/common/newqueue/SchedulerBase.h"
-#include "inet/common/newqueue/IPacketScheduler.h"
+#include "inet/common/newqueue/base/SchedulerBase.h"
+#include "inet/common/newqueue/contract/IPacketScheduler.h"
 
 namespace inet {
 namespace queue {
@@ -35,7 +35,7 @@ class INET_API Scheduler : public SchedulerBase
       public:
         PacketScheduler(PacketSchedulerFunction packetSchedulerFunction) : packetSchedulerFunction(packetSchedulerFunction) { }
 
-        virtual int schedulePacket(const std::vector<IPacketQueue *>& queues) const { return packetSchedulerFunction(queues); }
+        virtual int schedulePacket(const std::vector<IPacketSource *>& queues) const { return packetSchedulerFunction(queues); }
         virtual PacketSchedulerFunction getSchedulerFunction() const { return packetSchedulerFunction; }
     };
 

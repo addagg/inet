@@ -17,9 +17,13 @@
 
 package inet.common.newqueue;
 
-simple Scheduler extends SchedulerBase
+import inet.common.newqueue.base.SchedulerBase;
+import inet.common.newqueue.contract.IPacketScheduler;
+
+simple Scheduler extends SchedulerBase like IPacketScheduler
 {
     parameters:
         string schedulerClass = default(""); // determines the input queue of packets, the parameter must be the name of a C++ class which implements the IPacketScheduler C++ interface and is registered via Register_Class
         string schedulerFunction = default(""); // determines the input queue of packets, the parameter must be the name of a C++ function which implements the PacketSchedulerFunction C++ function and is registered via Register_Function
+        @class(queue::Scheduler);
 }

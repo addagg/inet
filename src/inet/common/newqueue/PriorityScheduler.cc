@@ -35,7 +35,7 @@ void PriorityScheduler::handlePendingRequestPacket()
         }
     }
     else
-        PacketQueueBase::handlePendingRequestPacket();
+        PacketSourceBase::handlePendingRequestPacket();
 }
 
 int PriorityScheduler::schedulePacket() const
@@ -58,20 +58,6 @@ Packet *PriorityScheduler::getPacket(int index)
             index -= numPackets;
     }
     throw cRuntimeError("Invalid operation");
-}
-
-void PriorityScheduler::pushPacket(Packet *packet)
-{
-    auto senderQueue = check_and_cast<IPacketQueue *>(packet->getSenderModule());
-    for (auto queue : inputQueues) {
-        if (!queue->isEmpty()) {
-            if (senderQueue != queue)
-                throw cRuntimeError("Illegal operation");
-            else
-                break;
-        }
-    }
-    send(packet, "out");
 }
 
 } // namespace queue

@@ -17,7 +17,7 @@
 
 package inet.linklayer.ppp;
 
-import inet.common.newqueue.IPacketQueue;
+import inet.common.newqueue.contract.IPacketQueue;
 
 //
 // PPP implementation.

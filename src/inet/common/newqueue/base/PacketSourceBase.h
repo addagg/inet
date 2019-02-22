@@ -15,34 +15,32 @@
 // along with this program; if not, see http://www.gnu.org/licenses/.
 //
 
-#ifndef __INET_CLASSIFIERBASE_H
-#define __INET_CLASSIFIERBASE_H
+#ifndef __INET_PACKETSOURCEBASE_H
+#define __INET_PACKETSOURCEBASE_H
 
-#include "inet/common/newqueue/PacketQueueBase.h"
+#include "inet/common/newqueue/contract/IPacketSource.h"
 
 namespace inet {
 namespace queue {
 
-class INET_API ClassifierBase : public PacketQueueBase
+class INET_API PacketSourceBase : public cSimpleModule, public IPacketSource
 {
   protected:
-    std::vector<cGate *> outputGates;
-    std::vector<IPacketQueue *> outputQueues;
+    bool asynchronous = false;
+    bool hasPendingRequestPacket = false;
 
   protected:
     virtual void initialize() override;
-    virtual int classifyPacket(Packet *packet) const = 0;
+    virtual void handleMessage(cMessage *msg) override;
+    virtual void handlePendingRequestPacket();
 
   public:
-    virtual int getNumPackets() override;
-    virtual Packet *getPacket(int index) override { throw cRuntimeError("Invalid operation"); }
-    virtual void pushPacket(Packet *packet) override;
-    virtual Packet *popPacket() override;
-    virtual void removePacket(Packet *packet) override { throw cRuntimeError("Invalid operation"); }
+    virtual bool isEmpty() override { return getNumPackets() == 0; }
+    virtual void requestPacket() override;
 };
 
 } // namespace queue
 } // namespace inet
 
-#endif // ifndef __INET_CLASSIFIERBASE_H
+#endif // ifndef __INET_PACKETSOURCEBASE_H
 

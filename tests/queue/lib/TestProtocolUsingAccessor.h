@@ -18,7 +18,7 @@
 #ifndef __INET_TESTPROTOCOLUSINGACCESSOR_H
 #define __INET_TESTPROTOCOLUSINGACCESSOR_H
 
-#include "inet/common/newqueue/IPacketQueue.h"
+#include "inet/common/newqueue/contract/IPacketQueue.h"
 #include "inet/common/newqueue/QueueAccessor.h"
 
 namespace inet {

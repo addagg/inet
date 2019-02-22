@@ -15,37 +15,28 @@
 // along with this program; if not, see http://www.gnu.org/licenses/.
 //
 
-#ifndef __INET_IPACKETSCHEDULER_H
-#define __INET_IPACKETSCHEDULER_H
-
-#include "inet/common/packet/Packet.h"
+#include "inet/common/newqueue/base/ClassifierBase.h"
+#include "inet/common/newqueue/QueueUtils.h"
 
 namespace inet {
 namespace queue {
 
-typedef  int (*PacketSchedulerFunction)(const std::vector<IPacketQueue *>& queues);
-
-/**
- * This class defines the interface for packet schedulers.
- */
-class INET_API IPacketScheduler
+void ClassifierBase::initialize()
 {
-  public:
-    virtual ~IPacketScheduler() {}
+    for (int i = 0; i < gateSize("out"); i++) {
+        auto outputGate = gate("out", i);
+        auto outputQueue = check_and_cast<IPacketSink *>(outputGate->getPathEndGate()->getOwnerModule());
+        outputGates.push_back(outputGate);
+        outputQueues.push_back(outputQueue);
+    }
+}
 
-    /**
-     * Returns the index of the scheduled queue.
-     */
-    virtual int schedulePacket(const std::vector<IPacketQueue *>& queues) const = 0;
-
-    /**
-     * Returns a pointer to the scheduler function.
-     */
-    virtual PacketSchedulerFunction getSchedulerFunction() const = 0;
-};
+void ClassifierBase::pushPacket(Packet *packet)
+{
+    int index = classifyPacket(packet);
+    animateSend(packet, outputGates[index]);
+    outputQueues[index]->pushPacket(packet);
+}
 
 } // namespace queue
 } // namespace inet
-
-#endif // ifndef __INET_IPACKETSCHEDULER_H
-

@@ -15,7 +15,7 @@
 // along with this program; if not, see http://www.gnu.org/licenses/.
 //
 
-#include "inet/common/newqueue/QueueingProtocolBase.h"
+#include "inet/common/newqueue/base/QueueingProtocolBase.h"
 
 namespace inet {
 namespace queue {

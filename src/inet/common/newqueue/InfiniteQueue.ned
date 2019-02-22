@@ -17,6 +17,9 @@
 
 package inet.common.newqueue;
 
+import inet.common.newqueue.base.PacketQueueBase;
+import inet.common.newqueue.contract.IPacketQueue;
+
 simple InfiniteQueue extends PacketQueueBase like IPacketQueue
 {
     parameters:
@@ -24,11 +27,4 @@ simple InfiniteQueue extends PacketQueueBase like IPacketQueue
         string comparatorFunction = default(""); // determines the order of packets in the queue, the parameter must be the name of a C++ function which implements the PacketComparatorFunction C++ function and is registered via Register_Function
         string displayStringTextFormat = default("%p packets\n%l");
         @class(queue::InfiniteQueue);
-        @signal[packetEnqueued](type=inet::Packet);
-        @signal[packetDequeued](type=inet::Packet);
-        @statistic[queueingTime](title="queueing times"; source=queueingTime(packetDequeued); record=histogram,vector; unit=s; interpolationmode=none);
-        @statistic[queueLength](title="queue length"; source=count(packetEnqueued) - count(packetDequeued); record=max,timeavg,vector; interpolationmode=sample-hold);
-    gates:
-        input in;
-        output out;
 }

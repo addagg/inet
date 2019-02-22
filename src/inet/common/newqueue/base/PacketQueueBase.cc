@@ -15,7 +15,7 @@
 // along with this program; if not, see http://www.gnu.org/licenses/.
 //
 
-#include "inet/common/newqueue/PacketQueueBase.h"
+#include "inet/common/newqueue/base/PacketQueueBase.h"
 
 namespace inet {
 namespace queue {
@@ -44,17 +44,6 @@ void PacketQueueBase::handlePendingRequestPacket()
     if (!isEmpty()) {
         send(popPacket(), "out");
         hasPendingRequestPacket = false;
-    }
-}
-
-void PacketQueueBase::animateSend(Packet *packet, cGate *gate)
-{
-    auto envir = getEnvir();
-    if (envir->isGUI()) {
-        packet->setSentFrom(gate->getOwnerModule(), gate->getId(), simTime());
-        envir->beginSend(packet);
-        envir->messageSendHop(packet, gate);
-        envir->endSend(packet);
     }
 }
 

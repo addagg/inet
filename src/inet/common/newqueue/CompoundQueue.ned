@@ -17,17 +17,16 @@
 
 package inet.common.newqueue;
 
-module CompoundQueue like IPacketQueue
+import inet.common.newqueue.base.PacketQueueBase;
+import inet.common.newqueue.contract.IPacketQueue;
+
+module CompoundQueue extends PacketQueueBase like IPacketQueue
 {
     parameters:
         int frameCapacity = default(-1);
         int byteCapacity = default(-1);
         string displayStringTextFormat = default("%p packets");
         @class(queue::CompoundQueue);
-        @display("i=block/queue");
         @signal[packetDropped](type=inet::Packet);
         @statistic[packetDropQueueOverflow](title="packet drops: queue overflow"; source=packetDropReasonIsQueueOverflow(packetDropped); record=count,sum(packetBytes),vector(packetBytes); interpolationmode=none);
-    gates:
-        input in;
-        output out;
 }

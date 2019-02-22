@@ -15,34 +15,30 @@
 // along with this program; if not, see http://www.gnu.org/licenses/.
 //
 
-#ifndef __INET_PACKETQUEUEBASE_H
-#define __INET_PACKETQUEUEBASE_H
+#ifndef __INET_CLASSIFIERBASE_H
+#define __INET_CLASSIFIERBASE_H
 
-#include "inet/common/newqueue/IPacketQueue.h"
-#include "inet/common/packet/Packet.h"
+#include "inet/common/newqueue/base/PacketSinkBase.h"
 
 namespace inet {
 namespace queue {
 
-class INET_API PacketQueueBase : public cSimpleModule, public IPacketQueue
+class INET_API ClassifierBase : public PacketSinkBase
 {
   protected:
-    bool asynchronous = false;
-    bool hasPendingRequestPacket = false;
+    std::vector<cGate *> outputGates;
+    std::vector<IPacketSink *> outputQueues;
 
   protected:
     virtual void initialize() override;
-    virtual void handleMessage(cMessage *msg) override;
-    virtual void handlePendingRequestPacket();
-    virtual void animateSend(Packet *packet, cGate *gate);
+    virtual int classifyPacket(Packet *packet) const = 0;
 
   public:
-    virtual bool isEmpty() override { return getNumPackets() == 0; }
-    virtual void requestPacket() override;
+    virtual void pushPacket(Packet *packet) override;
 };
 
 } // namespace queue
 } // namespace inet
 
-#endif // ifndef __INET_PACKETQUEUEBASE_H
+#endif // ifndef __INET_CLASSIFIERBASE_H
 

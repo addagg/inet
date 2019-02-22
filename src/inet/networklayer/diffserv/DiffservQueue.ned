@@ -18,11 +18,11 @@
 
 package inet.networklayer.diffserv;
 
-import inet.common.queue.DropTailQueue;
-import inet.common.queue.IOutputQueue;
-import inet.common.queue.PriorityScheduler;
-import inet.common.queue.Sink;
-import inet.common.queue.WrrScheduler;
+import inet.common.newqueue.CompoundQueue;
+import inet.common.newqueue.PriorityScheduler;
+import inet.common.newqueue.DropTailQueue;
+import inet.common.newqueue.Sink;
+import inet.common.newqueue.WrrScheduler;
 
 //
 // This is an example queue, that can be used in
@@ -49,14 +49,11 @@ import inet.common.queue.WrrScheduler;
 //
 // @see ~AFxyQueue
 //
-module DiffservQueue like IOutputQueue
+module DiffservQueue extends CompoundQueue
 {
     parameters:
         string interfaceTableModule;
         *.interfaceTableModule = default(absPath(interfaceTableModule));
-    gates:
-        input in;
-        output out;
     submodules:
         classifier: BehaviorAggregateClassifier {
             dscps = "EF AF11 AF12 AF13 AF21 AF22 AF23 AF31 AF32 AF33 AF41 AF42 AF43";
@@ -115,7 +112,7 @@ module DiffservQueue like IOutputQueue
         classifier.defaultOut --> beQueue.in;
 
         efMeter.greenOut --> { @display("ls=green"); } --> efQueue.in;
-        efMeter.redOut --> { @display("ls=red"); } --> sink.in++;
+        efMeter.redOut --> { @display("ls=red"); } --> sink.in;
 
         af1xQueue.out --> wrr.in++;
         af2xQueue.out --> wrr.in++;

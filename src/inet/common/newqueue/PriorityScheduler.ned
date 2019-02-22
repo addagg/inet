@@ -17,13 +17,16 @@
 
 package inet.common.newqueue;
 
+import inet.common.newqueue.base.SchedulerBase;
+import inet.common.newqueue.contract.IPacketScheduler;
+
 //
 // This module implements a strict priority scheduler.
 //
 // Packets arrived at the 0th gate are served first,
 // then the packets arrived at the 1st gates, and so on.
 //
-simple PriorityScheduler extends SchedulerBase
+simple PriorityScheduler extends SchedulerBase like IPacketScheduler
 {
     parameters:
         @class(queue::PriorityScheduler);

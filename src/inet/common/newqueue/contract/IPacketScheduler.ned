@@ -15,27 +15,13 @@
 // along with this program; if not, see http://www.gnu.org/licenses/.
 //
 
-#ifndef __INET_DELAYER_H
-#define __INET_DELAYER_H
+package inet.common.newqueue.contract;
 
-#include "inet/common/newqueue/base/PacketQueueBase.h"
-
-namespace inet {
-namespace queue {
-
-class INET_API Delayer : public cSimpleModule, public IPacketSink
+moduleinterface IPacketScheduler
 {
-  protected:
-    IPacketSink *sink = nullptr;
-
-  protected:
-    virtual void initialize() override;
-    virtual void handleMessage(cMessage *message) override;
-    virtual void pushPacket(Packet *packet) override;
-};
-
-} // namespace queue
-} // namespace inet
-
-#endif // ifndef __INET_DELAYER_H
-
+    parameters:
+        @display("i=block/join");
+    gates:
+        input in[];
+        output out;
+}

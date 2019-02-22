@@ -18,7 +18,7 @@
 #ifndef __INET_QUEUEVISUALIZERBASE_H
 #define __INET_QUEUEVISUALIZERBASE_H
 
-#include "inet/common/newqueue/IPacketQueue.h"
+#include "inet/common/newqueue/contract/IPacketQueue.h"
 #include "inet/visualizer/base/VisualizerBase.h"
 #include "inet/visualizer/util/Placement.h"
 #include "inet/visualizer/util/QueueFilter.h"

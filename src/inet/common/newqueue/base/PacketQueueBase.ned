@@ -15,13 +15,19 @@
 // along with this program; if not, see http://www.gnu.org/licenses/.
 //
 
-package inet.common.newqueue;
+package inet.common.newqueue.base;
 
-simple ClassifierBase extends PacketQueueBase
+simple PacketQueueBase
 {
     parameters:
-        @display("i=block/classifier");
+        bool asynchronous = default(false);
+        @class(queue::PacketQueueBase);
+        @display("i=block/queue");
+        @signal[packetEnqueued](type=inet::Packet);
+        @signal[packetDequeued](type=inet::Packet);
+        @statistic[queueingTime](title="queueing times"; source=queueingTime(packetDequeued); record=histogram,vector; unit=s; interpolationmode=none);
+        @statistic[queueLength](title="queue length"; source=count(packetEnqueued) - count(packetDequeued); record=max,timeavg,vector; interpolationmode=sample-hold);
     gates:
         input in;
-        output out[];
+        output out;
 }

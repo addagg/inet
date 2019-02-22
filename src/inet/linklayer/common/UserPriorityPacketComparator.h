@@ -18,7 +18,7 @@
 #ifndef __INET_USERPRIORITYPACKETCOMPARATOR_H
 #define __INET_USERPRIORITYPACKETCOMPARATOR_H
 
-#include "inet/common/newqueue/IPacketComparator.h"
+#include "inet/common/newqueue/contract/IPacketComparator.h"
 
 namespace inet {
 

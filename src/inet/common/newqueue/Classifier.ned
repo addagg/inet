@@ -17,7 +17,10 @@
 
 package inet.common.newqueue;
 
-simple Classifier extends ClassifierBase
+import inet.common.newqueue.base.ClassifierBase;
+import inet.common.newqueue.contract.IPacketClassifier;
+
+simple Classifier extends ClassifierBase like IPacketClassifier
 {
     parameters:
         string classifierClass = default(""); // determines the output queue of packets, the parameter must be the name of a C++ class which implements the IPacketClassifier C++ interface and is registered via Register_Class

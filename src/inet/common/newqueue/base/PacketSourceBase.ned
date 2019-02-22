@@ -15,14 +15,12 @@
 // along with this program; if not, see http://www.gnu.org/licenses/.
 //
 
-package inet.common.newqueue;
+package inet.common.newqueue.base;
 
-simple SchedulerBase extends PacketQueueBase
+simple PacketSourceBase
 {
     parameters:
-        @class(queue::SchedulerBase);
-        @display("i=block/join");
-    gates:
-        input in[];
-        output out;
+        bool asynchronous = default(false);
+        @class(queue::PacketSourceBase);
+        @display("i=block/source");
 }

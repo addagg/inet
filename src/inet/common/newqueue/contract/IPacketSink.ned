@@ -15,37 +15,12 @@
 // along with this program; if not, see http://www.gnu.org/licenses/.
 //
 
-#ifndef __INET_BYPASS_H
-#define __INET_BYPASS_H
+package inet.common.newqueue.contract;
 
-#include "inet/common/newqueue/PacketQueueBase.h"
-
-namespace inet {
-namespace queue {
-
-class INET_API Bypass : public cSimpleModule
+moduleinterface IPacketSink
 {
-  protected:
-    struct Output
-    {
-      public:
-        cGate *gate = nullptr;
-        IPacketSink *sink = nullptr;
-    };
-
-  protected:
-    Output output;
-
-  protected:
-    void initX(Output& output, cPar& gateName, cPar& synchronous);
-    void sendX(Packet *packet, Output& output);
-    virtual void initialize() override;
-    virtual void handleMessage(cMessage *message) override;
-//    virtual void processPacket(Packet *packet) override;
-};
-
-} // namespace queue
-} // namespace inet
-
-#endif // ifndef __INET_BYPASS_H
-
+    parameters:
+        @display("i=block/sink");
+    gates:
+        input in;
+}

@@ -15,27 +15,21 @@
 // along with this program; if not, see http://www.gnu.org/licenses/.
 //
 
-#ifndef __INET_DELAYER_H
-#define __INET_DELAYER_H
-
-#include "inet/common/newqueue/base/PacketQueueBase.h"
+#include "QueueUtils.h"
 
 namespace inet {
 namespace queue {
 
-class INET_API Delayer : public cSimpleModule, public IPacketSink
+void animateSend(Packet *packet, cGate *gate)
 {
-  protected:
-    IPacketSink *sink = nullptr;
-
-  protected:
-    virtual void initialize() override;
-    virtual void handleMessage(cMessage *message) override;
-    virtual void pushPacket(Packet *packet) override;
-};
+    auto envir = getEnvir();
+    if (envir->isGUI()) {
+        packet->setSentFrom(gate->getOwnerModule(), gate->getId(), simTime());
+        envir->beginSend(packet);
+        envir->messageSendHop(packet, gate);
+        envir->endSend(packet);
+    }
+}
 
 } // namespace queue
 } // namespace inet
-
-#endif // ifndef __INET_DELAYER_H
-

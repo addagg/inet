@@ -79,11 +79,6 @@ Packet *WrrScheduler::getPacket(int index)
     throw cRuntimeError("Invalid operation");
 }
 
-void WrrScheduler::pushPacket(Packet *packet)
-{
-    throw cRuntimeError("Invalid operation");
-}
-
 } // namespace queue
 } // namespace inet
 
