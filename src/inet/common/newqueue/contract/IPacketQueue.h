@@ -18,8 +18,9 @@
 #ifndef __INET_IPACKETQUEUE_H
 #define __INET_IPACKETQUEUE_H
 
-#include "inet/common/newqueue/contract/IPacketSink.h"
-#include "inet/common/newqueue/contract/IPacketSource.h"
+#include "inet/common/newqueue/contract/IPacketCollection.h"
+#include "inet/common/newqueue/contract/IPacketConsumer.h"
+#include "inet/common/newqueue/contract/IPacketProvider.h"
 
 namespace inet {
 namespace queue {
@@ -27,10 +28,8 @@ namespace queue {
 /**
  * This class defines the interface for packet queues.
  */
-class INET_API IPacketQueue : public IPacketSource, public IPacketSink
+class INET_API IPacketQueue : public IPacketCollection, public IPacketConsumer, public IPacketProvider
 {
-  public:
-    virtual ~IPacketQueue() {}
 };
 
 } // namespace queue

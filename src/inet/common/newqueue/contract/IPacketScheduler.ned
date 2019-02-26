@@ -17,11 +17,10 @@
 
 package inet.common.newqueue.contract;
 
-moduleinterface IPacketScheduler
+moduleinterface IPacketScheduler extends IPacketProvider
 {
     parameters:
         @display("i=block/join");
     gates:
-        input in[];
-        output out;
+        input in[] @labels(pop);
 }

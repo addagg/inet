@@ -20,32 +20,6 @@
 namespace inet {
 namespace queue {
 
-void PacketQueueBase::initialize()
-{
-    cSimpleModule::initialize();
-    asynchronous = par("asynchronous");
-}
-
-void PacketQueueBase::handleMessage(cMessage *msg)
-{
-    pushPacket(check_and_cast<Packet *>(msg));
-}
-
-void PacketQueueBase::requestPacket()
-{
-    ASSERT(!hasPendingRequestPacket);
-    hasPendingRequestPacket = true;
-    handlePendingRequestPacket();
-}
-
-void PacketQueueBase::handlePendingRequestPacket()
-{
-    Enter_Method_Silent();
-    if (!isEmpty()) {
-        send(popPacket(), "out");
-        hasPendingRequestPacket = false;
-    }
-}
-
 } // namespace queue
 } // namespace inet
+

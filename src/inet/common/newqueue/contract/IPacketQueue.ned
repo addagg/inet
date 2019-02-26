@@ -17,11 +17,8 @@
 
 package inet.common.newqueue.contract;
 
-moduleinterface IPacketQueue
+moduleinterface IPacketQueue extends IPacketConsumer, IPacketProvider
 {
     parameters:
         @display("i=block/queue");
-    gates:
-        input in;
-        output out;
 }

@@ -18,26 +18,28 @@
 #ifndef __INET_PACKETQUEUEBASE_H
 #define __INET_PACKETQUEUEBASE_H
 
+#include <algorithm>
 #include "inet/common/newqueue/contract/IPacketQueue.h"
-#include "inet/common/packet/Packet.h"
+#include "inet/common/newqueue/contract/IPacketQueueElement.h"
 
 namespace inet {
 namespace queue {
 
-class INET_API PacketQueueBase : public cSimpleModule, public IPacketQueue
+class INET_API PacketQueueBase : public cSimpleModule, public IPacketQueue, public IPacketQueueElement
 {
   protected:
-    bool asynchronous = false;
-    bool hasPendingRequestPacket = false;
-
-  protected:
-    virtual void initialize() override;
-    virtual void handleMessage(cMessage *msg) override;
-    virtual void handlePendingRequestPacket();
+    std::vector<IPacketConsumer::IListener *> consumerListeners;
+    std::vector<IPacketProvider::IListener *> providerListeners;
 
   public:
-    virtual bool isEmpty() override { return getNumPackets() == 0; }
-    virtual void requestPacket() override;
+    virtual bool canPopSomePacket(cGate *gate) override { return getNumPackets() > 0; }
+    virtual bool canPushAnyPacket(cGate *gate) override { return true; }
+
+    virtual void addListener(IPacketConsumer::IListener *listener) override { consumerListeners.push_back(listener); }
+    virtual void removeListener(IPacketConsumer::IListener *listener) override { consumerListeners.erase(find(consumerListeners.begin(), consumerListeners.end(), listener)); }
+
+    virtual void addListener(IPacketProvider::IListener *listener) override { providerListeners.push_back(listener); }
+    virtual void removeListener(IPacketProvider::IListener *listener) override { providerListeners.erase(find(providerListeners.begin(), providerListeners.end(), listener)); }
 };
 
 } // namespace queue

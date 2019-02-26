@@ -24,6 +24,8 @@ namespace inet {
 namespace queue {
 
 void animateSend(Packet *packet, cGate *gate);
+void checkPushPacketSupport(cGate *gate);
+void checkPopPacketSupport(cGate *gate);
 
 } // namespace queue
 } // namespace inet

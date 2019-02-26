@@ -26,7 +26,7 @@ module CompoundQueue extends PacketQueueBase like IPacketQueue
         int frameCapacity = default(-1);
         int byteCapacity = default(-1);
         string displayStringTextFormat = default("%p packets");
-        @class(queue::CompoundQueue);
+        @class(CompoundQueue);
         @signal[packetDropped](type=inet::Packet);
         @statistic[packetDropQueueOverflow](title="packet drops: queue overflow"; source=packetDropReasonIsQueueOverflow(packetDropped); record=count,sum(packetBytes),vector(packetBytes); interpolationmode=none);
 }

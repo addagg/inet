@@ -19,6 +19,9 @@
 #define __INET_COMPOUNDQUEUE_H
 
 #include "inet/common/newqueue/base/PacketQueueBase.h"
+#include "inet/common/newqueue/contract/IPacketCollection.h"
+#include "inet/common/newqueue/contract/IPacketConsumer.h"
+#include "inet/common/newqueue/contract/IPacketProvider.h"
 
 namespace inet {
 namespace queue {
@@ -26,39 +29,38 @@ namespace queue {
 class INET_API CompoundQueue : public PacketQueueBase
 {
   protected:
-    class InputGate : public cGate
-    {
-      public:
-        virtual bool deliver(cMessage *msg, simtime_t at);
-    };
-
-  protected:
     int frameCapacity = -1;
     int byteCapacity = -1;
-    b totalLength = b(0);
     const char *displayStringTextFormat = nullptr;
     cGate *inputGate = nullptr;
     cGate *outputGate = nullptr;
-    IPacketSink *inputQueue = nullptr;
-    IPacketQueue *outputQueue = nullptr;
-    cMessage pendingRequestPacket;
+    IPacketConsumer *inputQueue = nullptr;
+    IPacketProvider *outputQueue = nullptr;
+    IPacketCollection *outputCollection = nullptr;
 
   protected:
-    virtual cGate *createGateObject(cGate::Type type) override;
-    virtual void initialize() override;
-    virtual void handleMessage(cMessage *msg) override;
-    virtual void handlePendingRequestPacket() override;
-    virtual void scheduleHandlePendingRequest();
+    virtual void initialize(int stage) override;
     virtual void updateDisplayString();
     virtual b getTotalLength();
 
   public:
-    virtual ~CompoundQueue() { cancelEvent(&pendingRequestPacket); }
+    virtual int getMaxNumPackets() override { return frameCapacity; }
+    virtual b getMaxTotalLength() override { return B(byteCapacity); }
+
+    virtual bool isEmpty() override { return outputCollection->isEmpty(); }
     virtual int getNumPackets() override;
     virtual Packet *getPacket(int index) override;
-    virtual void pushPacket(Packet *packet) override;
-    virtual Packet *popPacket() override;
     virtual void removePacket(Packet *packet) override;
+
+    virtual bool supportsPushPacket(cGate *gate) override { return inputGate == gate; }
+    virtual int getNumPushablePackets(cGate *gate) override { return -1; }
+    virtual bool canPushPacket(Packet *packet, cGate *gate) override { return true; }
+    virtual void pushPacket(Packet *packet, cGate *gate) override;
+
+    virtual bool supportsPopPacket(cGate *gate) override { return outputGate == gate; }
+    virtual int getNumPoppablePackets(cGate *gate) override { return -1; }
+    virtual Packet *canPopPacket(cGate *gate) override { throw cRuntimeError("Invalid operation"); }
+    virtual Packet *popPacket(cGate *gate) override;
 };
 
 } // namespace queue

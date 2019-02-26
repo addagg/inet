@@ -1,0 +1,125 @@
+%description:
+
+TODO
+
+%file: test.ned
+
+import inet.common.newqueue.PacketCollector;
+import inet.common.newqueue.PacketFilter;
+import inet.common.newqueue.PacketProvider;
+
+network TestFilter
+{
+    submodules:
+        provider: PacketProvider {
+            @display("p=100,100");
+        }
+        filter: PacketFilter {
+            @display("p=200,100");
+        }
+        collector: PacketCollector {
+            @display("p=300,100");
+        }
+    connections allowunconnected:
+        provider.out --> filter.in;
+        filter.out --> collector.in;
+}
+
+%file: Test.cc
+#include "inet/common/FunctionRegistry.h"
+#include "inet/common/packet/Packet.h"
+
+using namespace inet; 
+
+static bool filterPacket(Packet *packet)
+{
+    static int i = 0;
+    return i++ % 2 == 0;
+}
+
+Register_Function("filterPacket", filterPacket);
+
+%inifile: omnetpp.ini
+
+[General]
+network = TestFilter
+sim-time-limit = 10s
+cmdenv-event-banners = false
+*.provider.packetLength = 1B
+*.collector.collectionInterval = 1s
+*.filter.filterFunction = "filterPacket"
+
+%contains: stdout
+Providing packet provider-0.
+Passing through packet provider-0.
+Collecting packet provider-0.
+Providing packet provider-1.
+Filtering out packet provider-1.
+Providing packet provider-2.
+Filtering out packet provider-2.
+Providing packet provider-3.
+Passing through packet provider-3.
+Collecting packet provider-3.
+Providing packet provider-4.
+Filtering out packet provider-4.
+Providing packet provider-5.
+Filtering out packet provider-5.
+Providing packet provider-6.
+Passing through packet provider-6.
+Collecting packet provider-6.
+Providing packet provider-7.
+Filtering out packet provider-7.
+Providing packet provider-8.
+Filtering out packet provider-8.
+Providing packet provider-9.
+Passing through packet provider-9.
+Collecting packet provider-9.
+Providing packet provider-10.
+Filtering out packet provider-10.
+Providing packet provider-11.
+Filtering out packet provider-11.
+Providing packet provider-12.
+Passing through packet provider-12.
+Collecting packet provider-12.
+Providing packet provider-13.
+Filtering out packet provider-13.
+Providing packet provider-14.
+Filtering out packet provider-14.
+Providing packet provider-15.
+Passing through packet provider-15.
+Collecting packet provider-15.
+Providing packet provider-16.
+Filtering out packet provider-16.
+Providing packet provider-17.
+Filtering out packet provider-17.
+Providing packet provider-18.
+Passing through packet provider-18.
+Collecting packet provider-18.
+Providing packet provider-19.
+Filtering out packet provider-19.
+Providing packet provider-20.
+Filtering out packet provider-20.
+Providing packet provider-21.
+Passing through packet provider-21.
+Collecting packet provider-21.
+Providing packet provider-22.
+Filtering out packet provider-22.
+Providing packet provider-23.
+Filtering out packet provider-23.
+Providing packet provider-24.
+Passing through packet provider-24.
+Collecting packet provider-24.
+Providing packet provider-25.
+Filtering out packet provider-25.
+Providing packet provider-26.
+Filtering out packet provider-26.
+Providing packet provider-27.
+Passing through packet provider-27.
+Collecting packet provider-27.
+Providing packet provider-28.
+Filtering out packet provider-28.
+Providing packet provider-29.
+Filtering out packet provider-29.
+Providing packet provider-30.
+Passing through packet provider-30.
+Collecting packet provider-30.

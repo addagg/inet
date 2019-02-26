@@ -17,12 +17,8 @@
 
 package inet.common.newqueue;
 
-simple DropTailQueue extends InfiniteQueue
+simple DropTailQueue extends PacketQueue
 {
     parameters:
-        int frameCapacity = default(100);
-        int byteCapacity = default(-1);
-        @class(queue::DropTailQueue);
-        @signal[packetDropped](type=inet::Packet);
-        @statistic[packetDropQueueOverflow](title="packet drops: queue overflow"; source=packetDropReasonIsQueueOverflow(packetDropped); record=count,sum(packetBytes),vector(packetBytes); interpolationmode=none);
+        dropperFunction = default("dropTail");
 }

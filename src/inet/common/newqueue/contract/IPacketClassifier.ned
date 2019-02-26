@@ -17,11 +17,10 @@
 
 package inet.common.newqueue.contract;
 
-moduleinterface IPacketClassifier
+moduleinterface IPacketClassifier extends IPacketConsumer
 {
     parameters:
         @display("i=block/classifier");
     gates:
-        input in;
-        output out[];
+        output out[] @labels(push);
 }

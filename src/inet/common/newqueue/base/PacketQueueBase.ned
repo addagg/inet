@@ -20,13 +20,7 @@ package inet.common.newqueue.base;
 simple PacketQueueBase
 {
     parameters:
-        bool asynchronous = default(false);
-        @class(queue::PacketQueueBase);
         @display("i=block/queue");
-        @signal[packetEnqueued](type=inet::Packet);
-        @signal[packetDequeued](type=inet::Packet);
-        @statistic[queueingTime](title="queueing times"; source=queueingTime(packetDequeued); record=histogram,vector; unit=s; interpolationmode=none);
-        @statistic[queueLength](title="queue length"; source=count(packetEnqueued) - count(packetDequeued); record=max,timeavg,vector; interpolationmode=sample-hold);
     gates:
         input in;
         output out;

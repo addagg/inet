@@ -18,8 +18,8 @@
 
 package inet.common.newqueue;
 
-import inet.common.newqueue.base.SchedulerBase;
-import inet.common.newqueue.contract.IPacketClassifier;
+import inet.common.newqueue.base.PacketSchedulerBase;
+import inet.common.newqueue.contract.IPacketScheduler;
 
 //
 // This module implements weighted round-robin scheduling.
@@ -36,11 +36,10 @@ import inet.common.newqueue.contract.IPacketClassifier;
 // therefore it can be used as the queue component of a NIC,
 // and as the input of another scheduler.
 //
-simple WrrScheduler extends SchedulerBase like IPacketClassifier
+simple WrrScheduler extends PacketSchedulerBase like IPacketScheduler
 {
     parameters:
         string weights;
-        @class(queue::WrrScheduler);
-        @display("i=block/server");
+        @class(WrrScheduler);
 }
 

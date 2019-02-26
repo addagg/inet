@@ -22,43 +22,57 @@ namespace queue {
 
 Define_Module(PriorityScheduler);
 
-void PriorityScheduler::handlePendingRequestPacket()
+void PriorityScheduler::initialize(int stage)
 {
-    if (asynchronous) {
-        Enter_Method_Silent();
-        for (auto queue : inputQueues) {
-            if (!queue->isEmpty()) {
-                queue->requestPacket();
-                hasPendingRequestPacket = false;
-                break;
-            }
-        }
-    }
-    else
-        PacketSourceBase::handlePendingRequestPacket();
+    PacketSchedulerBase::initialize(stage);
+    if (stage == INITSTAGE_LOCAL)
+        for (auto inputProvider : inputProviders)
+            inputCollections.push_back(check_and_cast<IPacketCollection *>(inputProvider));
 }
 
 int PriorityScheduler::schedulePacket() const
 {
-    for (int i = 0; i < (int)inputQueues.size(); i++) {
-        auto queue = inputQueues[i];
-        if (!queue->isEmpty())
+    for (int i = 0; i < (int)inputProviders.size(); i++) {
+        auto inputProvider = inputProviders[i];
+        if (inputProvider->canPopSomePacket(inputGates[i]->getPathStartGate()))
             return i;
     }
     return -1;
 }
 
+int PriorityScheduler::getNumPackets()
+{
+    int size = 0;
+    for (auto inputCollection : inputCollections)
+        size += inputCollection->getNumPackets();
+    return size;
+}
+
 Packet *PriorityScheduler::getPacket(int index)
 {
-    for (auto queue : inputQueues) {
-        auto numPackets = queue->getNumPackets();
+    for (auto inputCollection : inputCollections) {
+        auto numPackets = inputCollection->getNumPackets();
         if (index < numPackets)
-            return queue->getPacket(index);
+            return inputCollection->getPacket(index);
         else
             index -= numPackets;
     }
     throw cRuntimeError("Invalid operation");
 }
 
+void PriorityScheduler::removePacket(Packet *packet)
+{
+    for (auto inputCollection : inputCollections) {
+        for (int j = 0; j < inputCollection->getNumPackets(); j++) {
+            if (inputCollection->getPacket(j) == packet) {
+                inputCollection->removePacket(packet);
+                return;
+            }
+        }
+    }
+    throw cRuntimeError("Invalid operation");
+}
+
 } // namespace queue
 } // namespace inet
+

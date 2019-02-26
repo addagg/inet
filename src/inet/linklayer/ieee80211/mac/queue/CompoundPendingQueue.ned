@@ -19,7 +19,7 @@ package inet.linklayer.ieee80211.mac.queue;
 
 import inet.common.newqueue.Classifier;
 import inet.common.newqueue.CompoundQueue;
-import inet.common.newqueue.InfiniteQueue;
+import inet.common.newqueue.PacketQueue;
 import inet.common.newqueue.PriorityScheduler;
 
 module CompoundPendingQueue extends CompoundQueue
@@ -32,15 +32,15 @@ module CompoundPendingQueue extends CompoundQueue
                 classifierFunction = default("classifyMgmtOverData"); // classifyMgmtOverData, classifyMgmtOverMulticastOverUnicast, ...
                 @display("p=100,200");
         }
-        managementQueue: InfiniteQueue {
+        managementQueue: PacketQueue {
             parameters:
                 @display("p=300,100");
         }
-        multicastQueue: InfiniteQueue {
+        multicastQueue: PacketQueue {
             parameters:
                 @display("p=300,200");
         }
-        unicastQueue: InfiniteQueue {
+        unicastQueue: PacketQueue {
             parameters:
                 @display("p=300,300");
         }

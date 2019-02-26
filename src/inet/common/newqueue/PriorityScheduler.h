@@ -18,19 +18,30 @@
 #ifndef __INET_PRIORITYSCHEDULER_H
 #define __INET_PRIORITYSCHEDULER_H
 
-#include "inet/common/newqueue/base/SchedulerBase.h"
+#include "inet/common/newqueue/base/PacketSchedulerBase.h"
+#include "inet/common/newqueue/contract/IPacketCollection.h"
 
 namespace inet {
 namespace queue {
 
-class INET_API PriorityScheduler : public SchedulerBase
+class INET_API PriorityScheduler : public PacketSchedulerBase, public IPacketCollection
 {
   protected:
-    virtual void handlePendingRequestPacket() override;
+    std::vector<IPacketCollection *> inputCollections;
+
+  protected:
+    virtual void initialize(int stage) override;
     virtual int schedulePacket() const override;
 
   public:
+    virtual int getMaxNumPackets() override { return -1; }
+    virtual b getMaxTotalLength() override { return b(-1); }
+    virtual b getTotalLength() override { return b(-1); }
+
+    virtual bool isEmpty() override { return getNumPackets() == 0; }
+    virtual int getNumPackets() override;
     virtual Packet *getPacket(int index) override;
+    virtual void removePacket(Packet *packet) override;
 };
 
 } // namespace queue

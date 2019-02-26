@@ -25,67 +25,36 @@ namespace queue {
 
 Define_Module(CompoundQueue);
 
-bool CompoundQueue::InputGate::deliver(cMessage *msg, simtime_t at)
+void CompoundQueue::initialize(int stage)
 {
-    bool result = cGate::deliver(msg, at);
-    auto compoundQueue = check_and_cast<CompoundQueue *>(getOwnerModule());
-    compoundQueue->scheduleHandlePendingRequest();
-    return result;
-}
-
-cGate *CompoundQueue::createGateObject(cGate::Type type)
-{
-    if (type == cGate::INPUT)
-        return new InputGate();
-    else
-        return cModule::createGateObject(type);
-}
-
-void CompoundQueue::initialize()
-{
-    displayStringTextFormat = par("displayStringTextFormat");
-    frameCapacity = par("frameCapacity");
-    byteCapacity = par("byteCapacity");
-    inputGate = gate("in");
-    outputGate = gate("out");
-    inputQueue = check_and_cast<IPacketSink *>(gate("in")->getPathEndGate()->getOwnerModule());
-    outputQueue = check_and_cast<IPacketQueue *>(gate("out")->getPathStartGate()->getOwnerModule());
-}
-
-void CompoundQueue::handleMessage(cMessage *msg)
-{
-    if (msg == &pendingRequestPacket) {
-        if (hasPendingRequestPacket)
-            handlePendingRequestPacket();
+    PacketQueueBase::initialize(stage);
+    if (stage == INITSTAGE_LOCAL) {
+        displayStringTextFormat = par("displayStringTextFormat");
+        frameCapacity = par("frameCapacity");
+        byteCapacity = par("byteCapacity");
+        inputGate = gate("in");
+        outputGate = gate("out");
+        inputQueue = check_and_cast<IPacketConsumer *>(gate("in")->getPathEndGate()->getOwnerModule());
+        outputQueue = check_and_cast<IPacketProvider *>(gate("out")->getPathStartGate()->getOwnerModule());
+        outputCollection = check_and_cast<IPacketCollection *>(outputQueue);
     }
-    else
-        throw cRuntimeError("Unknown message");
-}
-
-void CompoundQueue::handlePendingRequestPacket()
-{
-    if (!isEmpty()) {
-        outputQueue->requestPacket();
-        hasPendingRequestPacket = false;
+    else if (stage == INITSTAGE_LAST) {
+        checkPushPacketSupport(inputGate);
+        checkPopPacketSupport(outputGate);
     }
-}
-
-void CompoundQueue::scheduleHandlePendingRequest()
-{
-    scheduleAt(simTime(), &pendingRequestPacket);
 }
 
 int CompoundQueue::getNumPackets()
 {
-    return outputQueue->getNumPackets();
+    return outputCollection->getNumPackets();
 }
 
 Packet *CompoundQueue::getPacket(int index)
 {
-    return outputQueue->getPacket(index);
+    return outputCollection->getPacket(index);
 }
 
-void CompoundQueue::pushPacket(Packet *packet)
+void CompoundQueue::pushPacket(Packet *packet, cGate *gate)
 {
     if ((frameCapacity != -1 && getNumPackets() >= frameCapacity) ||
         (byteCapacity != -1 && getTotalLength() + packet->getTotalLength() > B(byteCapacity)))
@@ -99,16 +68,14 @@ void CompoundQueue::pushPacket(Packet *packet)
     }
     else {
         animateSend(packet, inputGate);
-        inputQueue->pushPacket(packet);
+        inputQueue->pushPacket(packet, inputGate->getPathEndGate());
         updateDisplayString();
-        if (hasPendingRequestPacket)
-            handlePendingRequestPacket();
     }
 }
 
-Packet *CompoundQueue::popPacket()
+Packet *CompoundQueue::popPacket(cGate *gate)
 {
-    auto packet = outputQueue->popPacket();
+    auto packet = outputQueue->popPacket(outputGate->getPathStartGate());
     animateSend(packet, outputGate->getPathStartGate());
     updateDisplayString();
     return packet;
@@ -116,7 +83,7 @@ Packet *CompoundQueue::popPacket()
 
 void CompoundQueue::removePacket(Packet *packet)
 {
-    outputQueue->removePacket(packet);
+    outputCollection->removePacket(packet);
     updateDisplayString();
 }
 
@@ -135,13 +102,13 @@ void CompoundQueue::updateDisplayString()
         static std::string result;
         switch (directive) {
             case 'p':
-                result = std::to_string(outputQueue->getNumPackets());
+                result = std::to_string(outputCollection->getNumPackets());
                 break;
             case 'l':
                 result = getTotalLength().str();
                 break;
             case 'n':
-                result = !outputQueue->isEmpty() ? outputQueue->getPacket(0)->getFullName() : "";
+                result = !outputCollection->isEmpty() ? outputCollection->getPacket(0)->getFullName() : "";
                 break;
             default:
                 throw cRuntimeError("Unknown directive: %c", directive);
@@ -153,3 +120,4 @@ void CompoundQueue::updateDisplayString()
 
 } // namespace queue
 } // namespace inet
+

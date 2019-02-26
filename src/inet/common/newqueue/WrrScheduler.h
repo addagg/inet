@@ -19,7 +19,7 @@
 #ifndef __INET_WRRSCHEDULER_H
 #define __INET_WRRSCHEDULER_H
 
-#include "inet/common/newqueue/base/SchedulerBase.h"
+#include "inet/common/newqueue/base/PacketSchedulerBase.h"
 
 namespace inet {
 namespace queue {
@@ -27,20 +27,18 @@ namespace queue {
 /**
  * This module implements a Weighted Round Robin Scheduler.
  */
-class INET_API WrrScheduler : public SchedulerBase
+class INET_API WrrScheduler : public PacketSchedulerBase
 {
   protected:
     int *weights = nullptr; // array of weights (has numInputs elements)
     int *buckets = nullptr; // array of tokens in buckets (has numInputs elements)
 
   protected:
-    virtual void initialize() override;
+    virtual void initialize(int stage) override;
     virtual int schedulePacket() const override;
 
   public:
     virtual ~WrrScheduler();
-
-    virtual Packet *getPacket(int index) override;
 };
 
 } // namespace queue

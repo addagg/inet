@@ -15,7 +15,8 @@
 // along with this program; if not, see http://www.gnu.org/licenses/.
 //
 
-#include "QueueUtils.h"
+#include "inet/common/newqueue/contract/IPacketQueueElement.h"
+#include "inet/common/newqueue/QueueUtils.h"
 
 namespace inet {
 namespace queue {
@@ -26,10 +27,50 @@ void animateSend(Packet *packet, cGate *gate)
     if (envir->isGUI()) {
         packet->setSentFrom(gate->getOwnerModule(), gate->getId(), simTime());
         envir->beginSend(packet);
-        envir->messageSendHop(packet, gate);
+        while (gate->getNextGate() != nullptr) {
+            envir->messageSendHop(packet, gate);
+            gate = gate->getNextGate();
+        }
         envir->endSend(packet);
     }
 }
 
+void checkPushPacketSupport(cGate *gate)
+{
+    auto startGate = gate->getPathStartGate();
+    auto endGate = gate->getPathEndGate();
+    auto startElement = check_and_cast<IPacketQueueElement *>(startGate->getOwnerModule());
+    auto endElement = check_and_cast<IPacketQueueElement *>(endGate->getOwnerModule());
+    if (startGate == gate) {
+        if (!endElement->supportsPushPacket(endGate))
+            throw cRuntimeError("Incompatible connection between gates");
+    }
+    else if (endGate == gate) {
+        if (!startElement->supportsPushPacket(startGate))
+            throw cRuntimeError("Incompatible connection between gates");
+    }
+    else
+        throw cRuntimeError("Invalid argument");
+}
+
+void checkPopPacketSupport(cGate *gate)
+{
+    auto startGate = gate->getPathStartGate();
+    auto endGate = gate->getPathEndGate();
+    auto startElement = check_and_cast<IPacketQueueElement *>(startGate->getOwnerModule());
+    auto endElement = check_and_cast<IPacketQueueElement *>(endGate->getOwnerModule());
+    if (startGate == gate) {
+        if (!endElement->supportsPopPacket(endGate))
+            throw cRuntimeError("Incompatible connection between gates");
+    }
+    else if (endGate == gate) {
+        if (!startElement->supportsPopPacket(startGate))
+            throw cRuntimeError("Incompatible connection between gates");
+    }
+    else
+        throw cRuntimeError("Invalid argument");
+}
+
 } // namespace queue
 } // namespace inet
+
