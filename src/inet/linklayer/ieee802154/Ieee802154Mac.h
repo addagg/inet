@@ -82,7 +82,7 @@ class INET_API Ieee802154Mac : public MacProtocolBase, public IMacProtocol
         , initialCW(0)
         , txPower(0)
         , NB(0)
-        , macQueue()
+        , queue()
         , queueLength(0)
         , txAttempts(0)
         , bitrate(0)
@@ -271,7 +271,7 @@ class INET_API Ieee802154Mac : public MacProtocolBase, public IMacProtocol
 
     /** @brief A queue to store packets from upper layer in case another
        packet is still waiting for transmission..*/
-    queue::IPacketQueue *macQueue = nullptr;
+    queue::IPacketQueue *queue = nullptr;
 
     /** @brief length of the queue*/
     unsigned int queueLength;
