@@ -47,7 +47,6 @@ module EtherQosQueue extends CompoundQueue like IPacketQueue
         }
         scheduler: PriorityScheduler {
             parameters:
-                asynchronous = default(true);
                 @display("p=400,200");
         }
     connections:
