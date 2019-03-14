@@ -62,6 +62,7 @@ module AckingWirelessInterface extends InterfaceEntry like IWirelessInterface
                 @display("p=100,200");
         }
     connections:
+        upperLayerIn --> { @display("m=n"); } --> mac.upperLayerIn;
         mac.lowerLayerOut --> radio.upperLayerIn;
         mac.upperLayerOut --> { @display("m=n"); } --> upperLayerOut;
         radioIn --> { @display("m=s"); } --> radio.radioIn;
