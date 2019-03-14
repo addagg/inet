@@ -18,7 +18,7 @@
 #ifndef __INET_ETHERFRAMECLASSIFIER_H
 #define __INET_ETHERFRAMECLASSIFIER_H
 
-#include "inet/common/newqueue/base/ClassifierBase.h"
+#include "inet/common/newqueue/base/PacketClassifierBase.h"
 
 namespace inet {
 
@@ -29,7 +29,7 @@ namespace inet {
  * - PAUSE frames
  * - others
  */
-class INET_API EtherFrameClassifier : public inet::queue::ClassifierBase
+class INET_API EtherFrameClassifier : public inet::queue::PacketClassifierBase
 {
   public:
     /**

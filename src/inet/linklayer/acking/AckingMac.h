@@ -48,7 +48,7 @@ class INET_API AckingMac : public MacProtocolBase
 
     physicallayer::IRadio *radio = nullptr;
     physicallayer::IRadio::TransmissionState transmissionState = physicallayer::IRadio::TRANSMISSION_STATE_UNDEFINED;
-    inet::queue::IPacketQueue *queueModule = nullptr;
+    inet::queue::IPacketQueue *queue = nullptr;
 
     int outStandingRequests = 0;
     Packet *lastSentPk = nullptr;

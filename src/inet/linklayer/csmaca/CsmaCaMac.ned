@@ -64,7 +64,7 @@ module CsmaCaMac extends MacProtocolBase like IMacProtocol
                                           // "auto". "auto" values will be replaced by
                                           // a generated MAC address in init stage 0.
         string fcsMode @enum("declared","computed") = default("declared");
-        int maxQueueSize = default(-1); // maximum queue length in frames; only used if queueModule==""
+        int maxQueueSize = default(-1); // maximum queue length in frames
         bool useAck = default(true);
         double bitrate @unit(bps);
         int headerLength @unit(B) = default(16B); // minimum 16B, see CsmaCaMacDataHeader

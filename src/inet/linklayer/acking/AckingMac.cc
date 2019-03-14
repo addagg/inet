@@ -49,21 +49,21 @@ AckingMac::~AckingMac()
 
 void AckingMac::flushQueue()
 {
-    ASSERT(queueModule);
-    while (!queueModule->isEmpty()) {
-        cMessage *msg = queueModule->popPacket();
+    ASSERT(queue);
+    while (!queue->isEmpty()) {
+        auto packet = queue->popPacket();
         PacketDropDetails details;
         details.setReason(INTERFACE_DOWN);
-        emit(packetDroppedSignal, msg, &details);
-        delete msg;
+        emit(packetDroppedSignal, packet, &details);
+        delete packet;
     }
 }
 
 void AckingMac::clearQueue()
 {
-    ASSERT(queueModule);
-    while (!queueModule->isEmpty())
-        delete queueModule->popPacket();
+    ASSERT(queue);
+    while (!queue->isEmpty())
+        delete queue->popPacket();
 }
 
 void AckingMac::initialize(int stage)
@@ -84,7 +84,7 @@ void AckingMac::initialize(int stage)
         radio = check_and_cast<IRadio *>(radioModule);
         transmissionState = IRadio::TRANSMISSION_STATE_UNDEFINED;
 
-        queueModule = check_and_cast<inet::queue::IPacketQueue *>(getSubmodule("queue"));
+        queue = check_and_cast<inet::queue::IPacketQueue *>(getSubmodule("queue"));
     }
     else if (stage == INITSTAGE_LINK_LAYER) {
         radio->setRadioMode(fullDuplex ? IRadio::RADIO_MODE_TRANSCEIVER : IRadio::RADIO_MODE_RECEIVER);
@@ -152,7 +152,7 @@ void AckingMac::startTransmitting(Packet *msg)
 void AckingMac::getNextMsgFromHL()
 {
     if (outStandingRequests == 0) {
-        queueModule->requestPacket();
+        // TODO: queue->requestPacket();
         outStandingRequests++;
     }
     ASSERT(outStandingRequests <= 1);

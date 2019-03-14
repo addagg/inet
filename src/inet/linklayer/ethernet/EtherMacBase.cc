@@ -200,7 +200,7 @@ void EtherMacBase::initialize(int stage)
     }
 }
 
-void EtherMacBase::initializeQueueModule()
+void EtherMacBase::initializeQueue()
 {
     txQueue = check_and_cast<inet::queue::IPacketQueue *>(getSubmodule("queue"));
 }
@@ -266,7 +266,7 @@ void EtherMacBase::handleStartOperation(LifecycleOperation *operation)
 {
     interfaceEntry->setState(InterfaceEntry::State::UP);
     initializeFlags();
-    initializeQueueModule();
+    initializeQueue();
     readChannelParameters(true);
 }
 

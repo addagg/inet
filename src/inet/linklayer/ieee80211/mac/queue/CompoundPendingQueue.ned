@@ -17,7 +17,7 @@
 
 package inet.linklayer.ieee80211.mac.queue;
 
-import inet.common.newqueue.Classifier;
+import inet.common.newqueue.PacketClassifier;
 import inet.common.newqueue.CompoundQueue;
 import inet.common.newqueue.PacketQueue;
 import inet.common.newqueue.PriorityScheduler;
@@ -27,7 +27,7 @@ module CompoundPendingQueue extends CompoundQueue
     parameters:
         frameCapacity = default(100); // -1 means unlimited
     submodules:
-        classifier: Classifier {
+        classifier: PacketClassifier {
             parameters:
                 classifierFunction = default("classifyMgmtOverData"); // classifyMgmtOverData, classifyMgmtOverMulticastOverUnicast, ...
                 @display("p=100,200");

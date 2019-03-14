@@ -115,8 +115,7 @@ module EtherMac like IEtherMac
         bool promiscuous = default(false);  // if true, all packets are received, otherwise only the
                                             // ones with matching destination MAC address
         bool duplexMode = default(true);    // selects full-duplex (true) or half-duplex (false) operation
-        int txQueueLimit = default(1000);   // maximum number of frames queued up for transmission in the internal queue (only used if queueModule==""); additional frames cause a runtime error
-        string queueModule = default("");   // name of optional external queue module
+        int txQueueLimit = default(1000);   // maximum number of frames queued up for transmission in the internal queue, additional frames cause a runtime error
         bool frameBursting = default(true); // enable/disable frame bursting mode in Gigabit Ethernet
         int mtu @unit(B) = default(1500B);
         @lifecycleSupport;

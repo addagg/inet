@@ -16,7 +16,7 @@
 //
 
 #include "inet/common/ModuleAccess.h"
-#include "inet/common/newqueue/DropTailQueue.h"
+#include "inet/common/newqueue/PacketQueue.h"
 #include "inet/visualizer/common/QueueCanvasVisualizer.h"
 
 namespace inet {
@@ -58,8 +58,8 @@ QueueVisualizerBase::QueueVisualization *QueueCanvasVisualizer::createQueueVisua
     figure->setColor(color);
     figure->setSpacing(spacing);
     figure->setBounds(cFigure::Rectangle(0, 0, width, height));
-    if (auto dropTailQueue = dynamic_cast<inet::queue::DropTailQueue *>(queue))
-        figure->setMaxElementCount(dropTailQueue->getFrameCapacity());
+    if (auto packetQueue = dynamic_cast<inet::queue::PacketQueue *>(queue))
+        figure->setMaxElementCount(packetQueue->getMaxNumPackets());
     auto networkNode = getContainingNode(module);
     auto networkNodeVisualization = networkNodeVisualizer->getNetworkNodeVisualization(networkNode);
     if (networkNodeVisualization == nullptr)

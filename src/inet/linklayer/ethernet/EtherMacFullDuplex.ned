@@ -126,7 +126,7 @@ module EtherMacFullDuplex like IEtherMac
         bool duplexMode = default(true);    // must be set to "true", as EtherMacFullDuplex does not support half-duplex operation
                                             // (parameter is present to reduce the risk of accidental misconfiguration)
         int txQueueLimit = default(1000);   // maximum number of frames queued up for transmission in the internal queue
-                                            // (only used if queueModule==""); additional frames cause a runtime error
+                                            // additional frames cause a runtime error
         int mtu @unit(B) = default(1500B);
         @lifecycleSupport;
         double stopOperationExtraTime @unit(s) = default(-1s);    // extra time after lifecycle stop operation finished

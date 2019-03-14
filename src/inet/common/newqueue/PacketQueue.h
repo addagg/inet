@@ -21,6 +21,7 @@
 #include "inet/common/newqueue/base/PacketQueueBase.h"
 #include "inet/common/newqueue/contract/IPacketBuffer.h"
 #include "inet/common/newqueue/contract/IPacketComparatorFunction.h"
+#include "inet/common/newqueue/contract/IPacketDropperFunction.h"
 
 namespace inet {
 namespace queue {
