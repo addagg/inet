@@ -70,8 +70,6 @@ void AckingMac::initialize(int stage)
 {
     MacProtocolBase::initialize(stage);
     if (stage == INITSTAGE_LOCAL) {
-        outStandingRequests = 0;
-
         bitrate = par("bitrate");
         headerLength = par("headerLength");
         promiscuous = par("promiscuous");
@@ -90,7 +88,8 @@ void AckingMac::initialize(int stage)
         radio->setRadioMode(fullDuplex ? IRadio::RADIO_MODE_TRANSCEIVER : IRadio::RADIO_MODE_RECEIVER);
         if (useAck)
             ackTimeoutMsg = new cMessage("link-break");
-        getNextMsgFromHL();
+        if (!queue->isEmpty())
+            startTransmitting(queue->popPacket());
     }
 }
 
@@ -121,8 +120,8 @@ void AckingMac::receiveSignal(cComponent *source, simsignal_t signalID, long val
         IRadio::TransmissionState newRadioTransmissionState = static_cast<IRadio::TransmissionState>(value);
         if (transmissionState == IRadio::TRANSMISSION_STATE_TRANSMITTING && newRadioTransmissionState == IRadio::TRANSMISSION_STATE_IDLE) {
             radio->setRadioMode(fullDuplex ? IRadio::RADIO_MODE_TRANSCEIVER : IRadio::RADIO_MODE_RECEIVER);
-            if (!lastSentPk)
-                getNextMsgFromHL();
+            if (!lastSentPk && !queue->isEmpty())
+                startTransmitting(queue->popPacket());
         }
         transmissionState = newRadioTransmissionState;
     }
@@ -149,18 +148,8 @@ void AckingMac::startTransmitting(Packet *msg)
     sendDown(msg);
 }
 
-void AckingMac::getNextMsgFromHL()
-{
-    if (outStandingRequests == 0) {
-        // TODO: queue->requestPacket();
-        outStandingRequests++;
-    }
-    ASSERT(outStandingRequests <= 1);
-}
-
 void AckingMac::handleUpperPacket(Packet *packet)
 {
-    outStandingRequests--;
     if (radio->getTransmissionState() == IRadio::TRANSMISSION_STATE_TRANSMITTING) {
         // Logic error: we do not request packet from the external queue when radio is transmitting
         throw cRuntimeError("Received msg for transmission but transmitter is busy");
@@ -207,7 +196,8 @@ void AckingMac::handleSelfMessage(cMessage *message)
         emit(linkBrokenSignal, lastSentPk);
         delete lastSentPk;
         lastSentPk = nullptr;
-        getNextMsgFromHL();
+        if (!queue->isEmpty())
+            startTransmitting(queue->popPacket());
     }
     else {
         MacProtocolBase::handleSelfMessage(message);
@@ -226,7 +216,8 @@ void AckingMac::acked(Packet *frame)
         cancelEvent(ackTimeoutMsg);
         delete lastSentPk;
         lastSentPk = nullptr;
-        getNextMsgFromHL();
+        if (!queue->isEmpty())
+            startTransmitting(queue->popPacket());
     }
     else
         EV_DEBUG << "unaccepted\n";

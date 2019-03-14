@@ -50,7 +50,6 @@ class INET_API AckingMac : public MacProtocolBase
     physicallayer::IRadio::TransmissionState transmissionState = physicallayer::IRadio::TRANSMISSION_STATE_UNDEFINED;
     inet::queue::IPacketQueue *queue = nullptr;
 
-    int outStandingRequests = 0;
     Packet *lastSentPk = nullptr;
     simtime_t ackTimeout;
     cMessage *ackTimeoutMsg = nullptr;
@@ -68,9 +67,6 @@ class INET_API AckingMac : public MacProtocolBase
     virtual void encapsulate(Packet *msg);
     virtual void decapsulate(Packet *frame);
     virtual void acked(Packet *packet);    // called by other AckingMac module, when receiving a packet with my moduleID
-
-    // get MSG from queue
-    virtual void getNextMsgFromHL();
 
     //cListener:
     virtual void receiveSignal(cComponent *src, simsignal_t id, long value, cObject *details) override;
