@@ -32,6 +32,7 @@ package inet.linklayer.bmac;
 //*
 //**************************************************************************/
 
+import inet.common.newqueue.contract.IPacketQueue;
 import inet.linklayer.base.MacProtocolBase;
 import inet.linklayer.contract.IMacProtocol;
 
