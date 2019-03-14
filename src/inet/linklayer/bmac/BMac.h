@@ -95,7 +95,7 @@ class INET_API BMac : public MacProtocolBase, public IMacProtocol
   protected:
     /** @brief A queue to store packets from upper layer in case another
        packet is still waiting for transmission.*/
-    queue::IPacketQueue *macQueue;
+    queue::IPacketQueue *queue;
 
     /** @brief The radio. */
     physicallayer::IRadio *radio = nullptr;
