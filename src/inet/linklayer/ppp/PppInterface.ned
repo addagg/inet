@@ -45,7 +45,7 @@ module PppInterface extends InterfaceEntry like IPppInterface
         }
         ppp: Ppp {
             parameters:
-                txQueueLimit = 10000;
+                txQueueLimit = default(10000);
                 @display("p=200,200");
         }
     connections:

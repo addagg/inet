@@ -216,10 +216,10 @@ void Ppp::handleUpperPacket(Packet *packet)
         emit(packetDroppedSignal, packet, &details);
         delete packet;
     }
-    else if (!endTransmissionEvent->isScheduled() && !queue->isEmpty())
-        startTransmitting(queue->popPacket());
-    else
+    else if (endTransmissionEvent->isScheduled())
         queue->pushPacket(packet);
+    else
+        startTransmitting(packet);
 }
 //return !endTransmissionEvent->isScheduled();
 
