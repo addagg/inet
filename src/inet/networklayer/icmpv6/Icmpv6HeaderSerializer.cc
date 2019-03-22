@@ -38,6 +38,34 @@ Register_Serializer(Ipv6NeighbourAdvertisement, Icmpv6HeaderSerializer);
 Register_Serializer(Ipv6RouterSolicitation, Icmpv6HeaderSerializer);
 Register_Serializer(Ipv6RouterAdvertisement, Icmpv6HeaderSerializer);
 
+void serializeIpv6NdOptions(MemoryOutputStream& stream, const Ptr<const Ipv6NdMessage>& frame)
+{
+    for (int i=0; i < frame->getOptionArraySize(); i++) {
+        const Ipv6NdOption *option = frame->getOption(i);
+        switch (option->getType()) {
+        case IPv6ND_SOURCE_LINK_LAYER_ADDR_OPTION:
+        case IPv6ND_TARGET_LINK_LAYER_ADDR_OPTION: {
+            break;
+        }
+        case IPv6ND_PREFIX_INFORMATION: {
+            break;
+        }
+        case IPv6ND_MTU: {
+            break;
+        }
+        case IPv6ND_ADVERTISEMENT_INTERVAL: {
+            break;
+        }
+        case IPv6ND_HOME_AGENT_INFORMATION_OPTION: {
+            break;
+        }
+        default:
+            throw cRuntimeError("Unknown IPv6ND option type=%i", option->getType());
+        }
+    }
+}
+
+
 void Icmpv6HeaderSerializer::serialize(MemoryOutputStream& stream, const Ptr<const Chunk>& chunk) const
 {
     const auto& pkt = staticPtrCast<const Icmpv6Header>(chunk);
@@ -84,12 +112,7 @@ void Icmpv6HeaderSerializer::serialize(MemoryOutputStream& stream, const Ptr<con
             stream.writeUint16Be(frame->getChksum());
             stream.writeUint32Be(0);   // unused
             stream.writeIpv6Address(frame->getTargetAddress());
-            if (frame->getChunkLength() > B(8 + 16)) {   // has optional sourceLinkLayerAddress    (TLB options)
-                stream.writeByte(IPv6ND_SOURCE_LINK_LAYER_ADDR_OPTION);
-                stream.writeByte(1);         // length = 1 * 8byte
-                stream.writeMacAddress(frame->getSourceLinkLayerAddress());
-                ASSERT(1 + 1 + MAC_ADDRESS_SIZE == 8);
-            }
+            serializeIpv6NdOptions(stream, frame);
             break;
         }
 
@@ -99,8 +122,7 @@ void Icmpv6HeaderSerializer::serialize(MemoryOutputStream& stream, const Ptr<con
             stream.writeByte(frame->getCode());
             stream.writeUint16Be(frame->getChksum());
             stream.writeUint32Be(0);   // unused
-            //FIXME serialize TLV options
-            // TODO: incomplete
+            serializeIpv6NdOptions(stream, frame);
             break;
         }
 
@@ -110,8 +132,7 @@ void Icmpv6HeaderSerializer::serialize(MemoryOutputStream& stream, const Ptr<con
             stream.writeByte(frame->getCode());
             stream.writeUint16Be(frame->getChksum());
             stream.writeUint32Be(0);   // unused
-            //FIXME serialize TLV options
-            // TODO: incomplete
+            serializeIpv6NdOptions(stream, frame);
             break;
         }
 
@@ -121,8 +142,7 @@ void Icmpv6HeaderSerializer::serialize(MemoryOutputStream& stream, const Ptr<con
             stream.writeByte(frame->getCode());
             stream.writeUint16Be(frame->getChksum());
             stream.writeUint32Be(0);   // unused
-            //FIXME serialize TLV options
-            // TODO: incomplete
+            serializeIpv6NdOptions(stream, frame);
             break;
         }
 
